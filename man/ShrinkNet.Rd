@@ -19,7 +19,15 @@ ShrinkNet(tX, globalShrink = 1, maxiter = 100, blfdr = 0.1,
 \item{maxedges}{integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.}
 }
 \value{
-list
+A named list with the following elements:
+ \item{adjacency}{A sparse matrix containing the adjacency matrix corresponding to the selected graph.}
+ \item{p0}{A number giving the estimate of the proportion of null hypothesis.}
+ \item{kappabar}{A matrix containing scores used to rank edges.}
+ \item{globalPrior}{A matrix containing the (shape and rate) parameters of the global shrinkage prior
+ (gamma distribution) at each iteration of the variational algorithm.}
+ \item{allmargs}{A vector containing the values of the variational lower bounds for each regression
+ equation in the Bayesian SEM at each iteration of the variational algorithm.}
+ \item{time}{Running time of ShrinkNet.}
 }
 \description{
 Undirected network inference using a Bayesian SEM and a posteriori edge selection
@@ -30,8 +38,8 @@ fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{glo
 the approximate analytical solution of Leday et al (2015) is used.
 
 The edge selection procedure respects the ranking on edges in terms of the order in which
-they are considered in the forward selection. However, the Bayes factor generally decreases
-with the rank. For this reason, it may be pratical to avoid investigating all P=0.5*p*(p-1)
+they are considered in the forward selection. However, because the Bayes factor generally
+decreases with the rank, it may be pratical to avoid investigating all P=0.5*p*(p-1)
 possible edges since a large part of them are not important. The argument \code{maxedges}
 specifies the maximum number of edges to consider both for calculating p0 and the forward
 selection procedure. The default is 0.5*P.
