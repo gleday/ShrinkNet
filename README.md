@@ -15,5 +15,8 @@ If you wish to install the package from R:
 
 `library(devtools)`
 
-2. Run
+2. Install and load **ShrinkNet**
+
 `install_github("gleday/ShrinkNet")`
+
+`library(ShrinkNet)`
