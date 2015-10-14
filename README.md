@@ -11,14 +11,15 @@ If you wish to install the package from R:
 
 * Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 
-```
+```R
 install.packages("devtools")
 library(devtools)
 ```
 
-* Install and load **ShrinkNet**
+* Install and load **ShrinkNet**:
 
-```
+```R
 install_github("gleday/ShrinkNet")`
 library(ShrinkNet)
 ```
+
