@@ -18,6 +18,7 @@ library(devtools)
 
 * Install and load **ShrinkNet**
 
-`install_github("gleday/ShrinkNet")`
-
-`library(ShrinkNet)`
+```
+install_github("gleday/ShrinkNet")`
+library(ShrinkNet)
+```
