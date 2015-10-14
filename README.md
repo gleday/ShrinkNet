@@ -11,9 +11,10 @@ If you wish to install the package from R:
 
 1. Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 
-`install.packages("devtools")`
-
-`library(devtools)`
+```
+install.packages("devtools")
+library(devtools)
+```
 
 2. Install and load **ShrinkNet**
 
