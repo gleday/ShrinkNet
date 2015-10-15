@@ -1,4 +1,4 @@
-getSVD <- function(ii, tX){
+.getSVD <- function(ii, tX){
 
 	## Data
 	myy <- tX[ii,]

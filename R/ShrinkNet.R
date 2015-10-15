@@ -68,8 +68,8 @@ ShrinkNet <- function(tX, globalShrink=1, maxiter=100, blfdr=0.1, maxedges=NULL)
 
   ##### Data preparation
   cat("\n")
-  cat("STEP 0: SVD computations...")
-  allSVDs <- sapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
+  cat("STEP 0: SVD computations... ")
+  allSVDs <- sapply(1:nrow(tX), .getSVD, tX=tX, simplify=FALSE)
   cat("DONE\n")
 
   ##### Algo
@@ -94,7 +94,7 @@ ShrinkNet <- function(tX, globalShrink=1, maxiter=100, blfdr=0.1, maxedges=NULL)
   cat("\n\n")
   cat("Time (steps 0 to 3):", .convertToTime(tps2[3]))
   #print(tps2)
-  cat("\n")
+  cat("\n\n")
 
   ## Output
   out <- list(
