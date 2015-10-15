@@ -21,7 +21,7 @@ mydigamma <- function(vec) {
     .Call('ShrinkNet_mydigamma', PACKAGE = 'ShrinkNet', vec)
 }
 
-varAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink) {
-    .Call('ShrinkNet_varAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink)
+varAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol) {
+    .Call('ShrinkNet_varAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink, tol)
 }
 

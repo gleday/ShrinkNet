@@ -80,8 +80,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // varAlgo
-Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink);
-RcppExport SEXP ShrinkNet_varAlgo(SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP) {
+Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol);
+RcppExport SEXP ShrinkNet_varAlgo(SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -90,7 +90,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type bRand(bRandSEXP);
     Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
     Rcpp::traits::input_parameter< int >::type globalShrink(globalShrinkSEXP);
-    __result = Rcpp::wrap(varAlgo(SVDs, aRand, bRand, maxiter, globalShrink));
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    __result = Rcpp::wrap(varAlgo(SVDs, aRand, bRand, maxiter, globalShrink, tol));
     return __result;
 END_RCPP
 }

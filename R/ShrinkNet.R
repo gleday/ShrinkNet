@@ -2,9 +2,10 @@
 #'
 #' @param tX p by n data matrix
 #' @param globalShrink either 1 or 2. See Details.
-#' @param maxiter integer. Maximum number of iterations for the variational algorithm. Default is 100.
 #' @param blfdr Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.
+#' @param maxiter integer. Maximum number of iterations for the variational algorithm. Default is 100.
 #' @param maxedges integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.
+#' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
 #' @details
 #' If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
 #' fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
@@ -27,7 +28,7 @@
 #'  \item{time}{Running time of ShrinkNet.}
 #' @author Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
 #' @export
-ShrinkNet <- function(tX, globalShrink=1, maxiter=100, blfdr=0.1, maxedges=NULL){
+ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, maxedges=NULL){
 
   ##### Input checks
   if(!is.matrix(tX)){
@@ -74,7 +75,7 @@ ShrinkNet <- function(tX, globalShrink=1, maxiter=100, blfdr=0.1, maxedges=NULL)
 
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")
-  eb <- varAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink)
+  eb <- varAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
 
   ##### Estimate p0
   cat("STEP 2: Estimate p0... ")
@@ -98,7 +99,7 @@ ShrinkNet <- function(tX, globalShrink=1, maxiter=100, blfdr=0.1, maxedges=NULL)
 
   ## Output
   out <- list(
-    "adjacency" = Matrix:::Matrix(selGraph, sparse=TRUE),
+    "adjacency" = Matrix::Matrix(selGraph, sparse=TRUE),
     "p0"= p0,
     "kappabar" = eb$matThres,
     "globalPrior" = eb$parTau,

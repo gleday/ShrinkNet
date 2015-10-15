@@ -4,7 +4,7 @@
 \alias{ShrinkNet}
 \title{Undirected network inference using a Bayesian SEM and a posteriori edge selection}
 \usage{
-ShrinkNet(tX, globalShrink = 1, maxiter = 100, blfdr = 0.1,
+ShrinkNet(tX, globalShrink = 1, blfdr = 0.1, maxiter = 100, tol = 0.001,
   maxedges = NULL)
 }
 \arguments{
@@ -12,9 +12,11 @@ ShrinkNet(tX, globalShrink = 1, maxiter = 100, blfdr = 0.1,
 
 \item{globalShrink}{either 1 or 2. See Details.}
 
+\item{blfdr}{Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
+
 \item{maxiter}{integer. Maximum number of iterations for the variational algorithm. Default is 100.}
 
-\item{blfdr}{Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
+\item{tol}{numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.}
 
 \item{maxedges}{integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.}
 }

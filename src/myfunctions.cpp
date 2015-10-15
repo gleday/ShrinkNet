@@ -320,7 +320,7 @@ arma::colvec mydigamma(arma::colvec vec){
 }
 
 // [[Rcpp::export]]
-Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink){
+Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol){
   
   // Initialization
   arma::mat allmargs(maxiter+1, SVDs.size());
@@ -409,7 +409,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
     if(ct>2){
       // Check relative increase in total log-ML
       maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
-      if(maxDiffML<0.0001){
+      if(maxDiffML<tol){
         mybool = false;
       }//end if
     }//end if
