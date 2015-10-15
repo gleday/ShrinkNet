@@ -98,7 +98,7 @@ ShrinkNet <- function(tX, globalShrink=1, maxiter=100, blfdr=0.1, maxedges=NULL)
 
   ## Output
   out <- list(
-    "adjacency" = Matrix(selGraph, sparse=TRUE),
+    "adjacency" = Matrix:::Matrix(selGraph, sparse=TRUE),
     "p0"= p0,
     "kappabar" = eb$matThres,
     "globalPrior" = eb$parTau,
