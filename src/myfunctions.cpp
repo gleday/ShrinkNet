@@ -406,17 +406,20 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
     
     // Monitor convergence
     double maxDiffML;
-    if(ct>2){
-      // Check relative increase in total log-ML
-      maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
-      if(maxDiffML<tol){
-        mybool = false;
-      }//end if
-    }//end if
     if(ct==(maxiter-1)){
       mybool = false;
     }else{
-      ct++;
+      if(ct>2){
+        // Check relative increase for each variational lower bound
+        maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
+        if(maxDiffML<tol){
+          mybool = false;
+        }else{
+          ct++;
+        }
+      }else{
+        ct++;
+      }
     }
   }//end while
   Rcpp::Rcout << "DONE" << std::endl;
