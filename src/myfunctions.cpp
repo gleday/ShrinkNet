@@ -77,7 +77,7 @@ double varRidgei(int ii,  Rcpp::NumericMatrix tX, double aRand, double bRand, do
     }
     if(ct>2){
       Ldiff = std::abs(L(ct)-L(ct-1));
-      if(Ldiff<0.001){
+      if(Ldiff<0.0001){
         mybool = FALSE;
       }
     }
