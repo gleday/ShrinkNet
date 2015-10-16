@@ -130,11 +130,11 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
     logBFs(cpt, 0) = logML11-logML01;
     logBFs(cpt, 1) = logML12-logML02;
     
-    arma::uvec idx1 = arma::find(logBFs.col(0)>0);
-    arma::uvec idx2 = arma::find(logBFs.col(1)>0);
-    double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
+    //arma::uvec idx1 = arma::find(logBFs.col(0)>0);
+    //arma::uvec idx2 = arma::find(logBFs.col(1)>0);
+    //double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
     
-    Rcpp::Rcout << "cpt = " << cpt << " - " << p0 << std::endl;
+    //Rcpp::Rcout << "cpt = " << cpt << " - " << p0 << std::endl;
     
     // Convergence
     if(cpt==(maxedges-1)){

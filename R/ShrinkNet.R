@@ -51,7 +51,7 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
     }
     maxedges <- round(maxedges)
   }else{
-    maxedges <- round(0.5*nrow(tX)*(nrow(tX)-1)/4)
+    maxedges <- round(0.5*0.5*nrow(tX)*(nrow(tX)-1))
   }
   if(is.numeric(blfdr)){
     if((blfdr<=0)|(blfdr>=1)){
