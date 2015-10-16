@@ -107,6 +107,9 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
   double L1, L2;
   arma::mat logBFs(maxedges,2);
   logBFs.zeros();
+  arma::colvec p0(maxedges);
+  p0.zeros();
+  arma::uvec idx1, idx2;
   int cpt = 0;
   bool mybool = true;
   while(mybool){
@@ -130,27 +133,36 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
     logBFs(cpt, 0) = logML11-logML01;
     logBFs(cpt, 1) = logML12-logML02;
     
-    //arma::uvec idx1 = arma::find(logBFs.col(0)>0);
-    //arma::uvec idx2 = arma::find(logBFs.col(1)>0);
-    //double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
-    
-    //Rcpp::Rcout << "cpt = " << cpt << " - " << p0 << std::endl;
+    // proportion of null hypothesis
+    idx1 = arma::find(logBFs.col(0)>0);
+    idx2 = arma::find(logBFs.col(1)>0);
+    p0(cpt) = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
+
+    //Rcpp::Rcout << "cpt = " << cpt << " - " << p0(cpt) << std::endl;
     
     // Convergence
     if(cpt==(maxedges-1)){
       mybool = false;
     }else{
-      cpt++;
+      if(cpt>100){
+        if((p0(cpt-100)-p0(cpt))<=0.001){
+          mybool = false;
+        }else{
+          cpt++;
+        }
+      }else{
+        cpt++;
+      }
     }
   }
   
   // OUTPUT
-  arma::uvec idx1 = arma::find(logBFs.col(0)>0);
-  arma::uvec idx2 = arma::find(logBFs.col(1)>0);
-  double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
+  //arma::uvec idx1 = arma::find(logBFs.col(0)>0);
+  //arma::uvec idx2 = arma::find(logBFs.col(1)>0);
+  //double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
   
   //return List::create(Named("p0") = p0, Named("logBFs") = logBFs.rows(0,cpt));
-  return p0;
+  return p0(cpt);
 }
 
 // [[Rcpp::export]]
@@ -433,7 +445,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
         // Check relative increase for each variational lower bound
         maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
         //Rcpp::Rcout << ",  maxDiffML = " << maxDiffML << std::endl;
-        if(maxDiffML<tol){
+        if(maxDiffML<tol || (allmargs.row(ct)-allmargs.row(ct-1))<0){
           mybool = false;
         }else{
           ct++;
