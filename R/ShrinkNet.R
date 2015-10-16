@@ -73,11 +73,6 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   allSVDs <- sapply(1:nrow(tX), .getSVD, tX=tX, simplify=FALSE)
   cat("DONE\n")
   
-  print(dim(allSVDs[[1]]$u))
-  print(length(allSVDs[[1]]$d))
-  print(dim(allSVDs[[1]]$v))
-  #print(allSVDs[[1]]$d)
-
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")
   eb <- varAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
