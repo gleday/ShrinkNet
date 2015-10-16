@@ -445,7 +445,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
         // Check relative increase for each variational lower bound
         maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
         //Rcpp::Rcout << ",  maxDiffML = " << maxDiffML << std::endl;
-        if(maxDiffML<tol || (allmargs.row(ct)-allmargs.row(ct-1))<0){
+        if(maxDiffML<tol){
           mybool = false;
         }else{
           ct++;
