@@ -130,11 +130,11 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
     logBFs(cpt, 0) = logML11-logML01;
     logBFs(cpt, 1) = logML12-logML02;
     
-    //arma::uvec idx1 = arma::find(logBFs.col(0)>0);
-    //arma::uvec idx2 = arma::find(logBFs.col(1)>0);
-    //double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
+    arma::uvec idx1 = arma::find(logBFs.col(0)>0);
+    arma::uvec idx2 = arma::find(logBFs.col(1)>0);
+    double p0 = 1-(((double)idx1.n_elem+(double)idx2.n_elem)/((double)tX.nrow()*((double)tX.nrow()-1)));
     
-    //Rcpp::Rcout << "cpt = " << cpt << " - " << p0 << std::endl;
+    Rcpp::Rcout << "cpt = " << cpt << " - " << p0 << std::endl;
     
     // Convergence
     if(cpt==(maxedges-1)){
@@ -213,7 +213,7 @@ arma::mat edgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, doub
     }
     
     // Convergence
-    if(cpt==(maxedges-1) || ctstop==100){
+    if(cpt==(maxedges-1) || ctstop==200){
       mybool = false;
     }else{
       cpt++;
@@ -235,10 +235,16 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   // Data
   Rcpp::List tplist = Rcpp::as<Rcpp::List>(SVDs[ii-1]);
   arma::colvec myy = Rcpp::as<arma::colvec>(tplist["myy"]);
+  arma::colvec myd = Rcpp::as<arma::colvec>(tplist["d"]);
+  arma::mat myv = Rcpp::as<arma::mat>(tplist["v"]);
+  arma::mat FTF = Rcpp::as<arma::mat>(tplist["FTF"]);
   arma::mat myX = Rcpp::as<arma::mat>(tplist["myX"]);
+  arma::mat myF = Rcpp::as<arma::mat>(tplist["myF"]);
   arma::mat XTX = myX.t() * myX;
   int then = myX.n_rows;
   int thep = myX.n_cols;
+  double valLogDet;
+  double sign;
   
   // Update posterior shape parameters
   double aRandStar = aRand + 0.5*thep;
@@ -255,38 +261,51 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   }
   
   // Update sigma
-  //postSigma <- (1/expSig)*SVDs[[ii]]$v %*% solve(SVDs[[ii]]$FTF + expTau*diag(thep)) %*% t(SVDs[[ii]]$v)
-  arma::mat postSigma = arma::inv(expSig*(XTX + expTau*arma::eye<arma::mat>(thep, thep)));
+  arma::mat postSigma;
+  if(then>=thep){
+    postSigma = arma::inv(expSig*(XTX + expTau*arma::eye<arma::mat>(thep, thep)));
+  }else{
+    // Use Woodbury identity for efficiency
+    postSigma = (1/expSig)*((1/expTau)*arma::eye<arma::mat>(thep, thep) - (1/(expTau*expTau)) * trans(myX) * arma::inv(arma::eye<arma::mat>(then, then) + (1/expTau)* myX * trans(myX)) * myX);
+  }
+  
+  // Calculate postOmega
+  arma::mat postOmega = (1/expSig)*arma::diagmat(1/(myd%myd + expTau*arma::ones(myd.n_elem))); //(1/expSig)*diag((1/()));
   
   // Update beta
   arma::colvec postMean = expSig*postSigma*trans(myX)*myy;
+  arma::colvec postTheta = expSig*postOmega*trans(myF)*myy;
   
   // Update posterior rate for sigma^2
-  double dSigmaStar = dSigma + 0.5*(arma::as_scalar(trans(myy-myX*postMean)*(myy-myX*postMean))+arma::trace(XTX*postSigma)) + 0.5*expTau*(arma::as_scalar(trans(postMean)*(postMean)) + arma::trace(postSigma));
+  double tempval = arma::as_scalar(trans(postTheta)*(postTheta)) + arma::trace(postSigma);
+  double dSigmaStar = dSigma + 0.5*(arma::as_scalar(trans(myy-myF*postTheta)*(myy-myF*postTheta))+arma::trace(FTF*postOmega)) + 0.5*expTau*tempval;
   
   // Update posterior rates for tau^2
-  double bRandStar = bRand + 0.5*expSig*(arma::as_scalar(trans(postMean)*(postMean)) + arma::trace(postSigma));
+  double bRandStar = bRand + 0.5*expSig*tempval;
   
   //    if(ii==1){
   //      Rcpp::Rcout << "expTau = " << expTau << std::endl;
   //      Rcpp::Rcout << "bRand = " << bRand << std::endl;
   //      Rcpp::Rcout << "expSig = " << expSig << std::endl;
   //      Rcpp::Rcout << "arma::as_scalar(trans(postMean)*(postMean)) = " << arma::as_scalar(trans(postMean)*(postMean)) << std::endl;
-  //      Rcpp::Rcout << "arma::trace(postSigma) = " << arma::trace(postSigma) << std::endl;
-  //    }
+        //Rcpp::Rcout << "calc 1 = " << arma::as_scalar(trans(postMean)*(postMean)) + arma::trace(postSigma) << std::endl;
+        //Rcpp::Rcout << "calc 2= " <<  << std::endl;
+        //Rcpp::Rcout << "equal ? = " << arma::all(postSigma==postSigma0) << std::endl;
+   //   }
   
   // Lower bound marginal likelihood
   double Lrand = aRand*log(bRand)-aRandStar*log(bRandStar)+lgamma(aRandStar)-lgamma(aRand);
   double Lsig = cSigma*log(dSigma)-cSigmaStar*log(dSigmaStar)+lgamma(cSigmaStar)-lgamma(cSigma);
   double theplus = 0.5*(expSig)*(expTau)*(arma::as_scalar(trans(postMean)*postMean) + arma::trace(postSigma));
+  arma::log_det(valLogDet, sign, postSigma);
   double L;
   try{
-    L = 0.5*thep - 0.5*then*log(2*arma::datum::pi) + 0.5*sum(arma::log(arma::eig_sym(postSigma))) + Lrand + Lsig + theplus;
+    L = 0.5*thep - 0.5*then*log(2*arma::datum::pi) + 0.5*valLogDet + Lrand + Lsig + theplus;
   }
   catch(...){
     L = arma::datum::nan;
   }
-  //Rcpp::Rcout << "Debug X5 " << std::endl;
+
   // Output
   arma::colvec postSd = sqrt(arma::diagvec(postSigma));
   arma::colvec ratio = arma::abs(postMean)/postSd;
@@ -306,7 +325,7 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   Rcpp::NumericVector postSig(2);
   postSig(0) = cSigmaStar;
   postSig(1) = dSigmaStar;
-  //Rcpp::Rcout << "Debug X6 " << std::endl;
+
   return Rcpp::List::create(Rcpp::Named("postBeta") = postBeta, Rcpp::Named("L") = L, Rcpp::Named("priorRand") = priorRand, Rcpp::Named("priorSig") = priorSig, Rcpp::Named("postRand") = postRand, Rcpp::Named("postSig") = postSig);
 }
 
@@ -356,6 +375,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
     
     // Fit all models
     for(int j=0; j<SVDs.size(); j++){
+      //Rcpp::Rcout << "j " << j+1 << std::endl;
       tplist = Rcpp::as<Rcpp::List>(varRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar));
       tpvals = Rcpp::as<arma::colvec>(tplist["postRand"]);
       tpvals2 = Rcpp::as<arma::colvec>(tplist["postSig"]);
@@ -412,6 +432,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
       if(ct>2){
         // Check relative increase for each variational lower bound
         maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
+        Rcpp::Rcout << ",  maxDiffML = " << maxDiffML << std::endl;
         if(maxDiffML<tol){
           mybool = false;
         }else{

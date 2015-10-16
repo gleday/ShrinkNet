@@ -27,7 +27,7 @@ A named list with the following elements:
  \item{kappabar}{A matrix containing scores used to rank edges.}
  \item{globalPrior}{A matrix containing the (shape and rate) parameters of the global shrinkage prior
  (gamma distribution) at each iteration of the variational algorithm.}
- \item{allmargs}{A vector containing the values of the variational lower bounds for each regression
+ \item{allmargs}{A matrix containing the values of the variational lower bounds for each regression
  equation in the Bayesian SEM at each iteration of the variational algorithm.}
  \item{time}{Running time of ShrinkNet.}
 }
