@@ -235,6 +235,13 @@ arma::mat edgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, doub
   return myGraph;
 }
 
+double myf(int myk, arma::mat mm1, arma::mat mm2){
+  arma::rowvec myrowvec = mm1.row(myk);
+  arma::colvec mycolvec = mm2.col(myk);
+  double out = arma::as_scalar(myrowvec*mycolvec);
+  return out;
+}
+
 // [[Rcpp::export]]
 Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit){
   
@@ -247,16 +254,17 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   // Data
   Rcpp::List tplist = Rcpp::as<Rcpp::List>(SVDs[ii-1]);
   arma::colvec myy = Rcpp::as<arma::colvec>(tplist["myy"]);
+  arma::mat myu = Rcpp::as<arma::mat>(tplist["u"]);
   arma::colvec myd = Rcpp::as<arma::colvec>(tplist["d"]);
   arma::mat myv = Rcpp::as<arma::mat>(tplist["v"]);
   arma::mat FTF = Rcpp::as<arma::mat>(tplist["FTF"]);
   arma::mat myX = Rcpp::as<arma::mat>(tplist["myX"]);
   arma::mat myF = Rcpp::as<arma::mat>(tplist["myF"]);
-  arma::mat XTX = myX.t() * myX;
   int then = myX.n_rows;
   int thep = myX.n_cols;
-  double valLogDet;
-  double sign;
+  arma::colvec vec0(thep);
+  vec0.zeros();
+  vec0.subvec(0,myd.n_elem-1) = myd % myd;
   
   // Update posterior shape parameters
   double aRandStar = aRand + 0.5*thep;
@@ -271,45 +279,38 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
     expTau = aRandStar/bRandStarInit(ii-1);
     expSig = cSigmaStar/dSigmaStarInit(ii-1);
   }
-  
+
   // Update sigma
-  arma::mat postSigma;
-  if(then>=thep){
-    postSigma = arma::inv(expSig*(XTX + expTau*arma::eye<arma::mat>(thep, thep)));
-  }else{
+  //arma::mat postSigma;
+  //if(then>=thep){
+  //  postSigma = arma::inv(expSig*(XTX + expTau*arma::eye<arma::mat>(thep, thep)));
+  //}else{
     // Use Woodbury identity for efficiency
-    postSigma = (1/expSig)*((1/expTau)*arma::eye<arma::mat>(thep, thep) - (1/(expTau*expTau)) * trans(myX) * arma::inv(arma::eye<arma::mat>(then, then) + (1/expTau)* myX * trans(myX)) * myX);
-  }
-  
+  //  postSigma = (1/expSig)*((1/expTau)*arma::eye<arma::mat>(thep, thep) - (1/(expTau*expTau)) * trans(myX) * arma::inv(arma::eye<arma::mat>(then, then) + (1/expTau)* myX * trans(myX)) * myX);
+  //}
+
   // Calculate postOmega
-  arma::mat postOmega = (1/expSig)*arma::diagmat(1/(myd%myd + expTau*arma::ones(myd.n_elem))); //(1/expSig)*diag((1/()));
-  
-  // Update beta
-  arma::colvec postMean = expSig*postSigma*trans(myX)*myy;
+  arma::mat tempPostOmega = arma::diagmat(1/(myd%myd + expTau*arma::ones(myd.n_elem)));
+  arma::mat postOmega = (1/expSig)*tempPostOmega; //(1/expSig)*diag((1/()));
+
+  // Calculate the trace of postSigma
+  double tracePostSigma = (1/expSig)*sum(1/(vec0+expTau*arma::ones(vec0.n_elem)));
+
+  // Calculate posterior mean of theta
   arma::colvec postTheta = expSig*postOmega*trans(myF)*myy;
-  
+
   // Update posterior rate for sigma^2
-  double tempval = arma::as_scalar(trans(postTheta)*(postTheta)) + arma::trace(postSigma);
+  double tempval = arma::as_scalar(trans(postTheta)*(postTheta)) + tracePostSigma;
   double dSigmaStar = dSigma + 0.5*(arma::as_scalar(trans(myy-myF*postTheta)*(myy-myF*postTheta))+arma::trace(FTF*postOmega)) + 0.5*expTau*tempval;
-  
+
   // Update posterior rates for tau^2
   double bRandStar = bRand + 0.5*expSig*tempval;
-  
-  //    if(ii==1){
-  //      Rcpp::Rcout << "expTau = " << expTau << std::endl;
-  //      Rcpp::Rcout << "bRand = " << bRand << std::endl;
-  //      Rcpp::Rcout << "expSig = " << expSig << std::endl;
-  //      Rcpp::Rcout << "arma::as_scalar(trans(postMean)*(postMean)) = " << arma::as_scalar(trans(postMean)*(postMean)) << std::endl;
-        //Rcpp::Rcout << "calc 1 = " << arma::as_scalar(trans(postMean)*(postMean)) + arma::trace(postSigma) << std::endl;
-        //Rcpp::Rcout << "calc 2= " <<  << std::endl;
-        //Rcpp::Rcout << "equal ? = " << arma::all(postSigma==postSigma0) << std::endl;
-   //   }
   
   // Lower bound marginal likelihood
   double Lrand = aRand*log(bRand)-aRandStar*log(bRandStar)+lgamma(aRandStar)-lgamma(aRand);
   double Lsig = cSigma*log(dSigma)-cSigmaStar*log(dSigmaStar)+lgamma(cSigmaStar)-lgamma(cSigma);
-  double theplus = 0.5*(expSig)*(expTau)*(arma::as_scalar(trans(postMean)*postMean) + arma::trace(postSigma));
-  arma::log_det(valLogDet, sign, postSigma);
+  double theplus = 0.5*(expSig)*(expTau)*(arma::as_scalar(trans(postTheta)*postTheta) + tracePostSigma);
+  double valLogDet = -thep*log(expSig) - sum(log(vec0+expTau*arma::ones(vec0.n_elem)));
   double L;
   try{
     L = 0.5*thep - 0.5*then*log(2*arma::datum::pi) + 0.5*valLogDet + Lrand + Lsig + theplus;
@@ -318,8 +319,38 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
     L = arma::datum::nan;
   }
 
+  // Calculate posterior mean of beta
+  arma::colvec postMean = myv*postTheta;
+
+  // Calculate posterior sd of beta efficiently via the Woodbury identity
+  arma::colvec postSd(thep);
+  postSd.zeros();
+  if(then>=thep){
+    arma::mat mymm1 = myv*postOmega;
+    for(int k=0; k<thep; k++){
+      postSd(k) = sqrt(myf(k, mymm1, trans(myv)));
+    }
+  }else{
+    arma::mat myprod = myu * tempPostOmega * trans(myu);
+    arma::mat mymm1 = trans(myX)*myprod;
+    for(int k=0; k<thep; k++){
+      postSd(k) = sqrt(myf(k, mymm1, myX));
+    }
+  }
+  
+  //if(ii==1){
+    //      Rcpp::Rcout << "expTau = " << expTau << std::endl;
+    //      Rcpp::Rcout << "bRand = " << bRand << std::endl;
+    //      Rcpp::Rcout << "expSig = " << expSig << std::endl;
+    //      Rcpp::Rcout << "arma::as_scalar(trans(postMean)*(postMean)) = " << arma::as_scalar(trans(postMean)*(postMean)) << std::endl;
+    //Rcpp::Rcout << "myprod.n_rows = " << myprod.n_rows << std::endl;
+    //Rcpp::Rcout << "myprod.n_cols = " << myprod.n_cols << std::endl;
+    //Rcpp::Rcout << "sum(postSd) = " << sum(postSd) << std::endl;
+    //Rcpp::Rcout << "sum(postSd2) = " << sum(postSd) << std::endl;
+    //Rcpp::Rcout << "equal ? = " << arma::all(postSigma==postSigma0) << std::endl;
+  //}
+  
   // Output
-  arma::colvec postSd = sqrt(arma::diagvec(postSigma));
   arma::colvec ratio = arma::abs(postMean)/postSd;
   arma::mat postBeta;
   postBeta.insert_cols(postBeta.n_cols, postMean);
