@@ -280,18 +280,9 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
     expSig = cSigmaStar/dSigmaStarInit(ii-1);
   }
 
-  // Update sigma
-  //arma::mat postSigma;
-  //if(then>=thep){
-  //  postSigma = arma::inv(expSig*(XTX + expTau*arma::eye<arma::mat>(thep, thep)));
-  //}else{
-    // Use Woodbury identity for efficiency
-  //  postSigma = (1/expSig)*((1/expTau)*arma::eye<arma::mat>(thep, thep) - (1/(expTau*expTau)) * trans(myX) * arma::inv(arma::eye<arma::mat>(then, then) + (1/expTau)* myX * trans(myX)) * myX);
-  //}
-
   // Calculate postOmega
   arma::mat tempPostOmega = arma::diagmat(1/(myd%myd + expTau*arma::ones(myd.n_elem)));
-  arma::mat postOmega = (1/expSig)*tempPostOmega; //(1/expSig)*diag((1/()));
+  arma::mat postOmega = (1/expSig)*tempPostOmega;
 
   // Calculate the trace of postSigma
   double tracePostSigma = (1/expSig)*sum(1/(vec0+expTau*arma::ones(vec0.n_elem)));
@@ -322,15 +313,17 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   // Calculate posterior mean of beta
   arma::colvec postMean = myv*postTheta;
 
-  // Calculate posterior sd of beta efficiently via the Woodbury identity
+  // Calculate posterior sd of beta efficiently
   arma::colvec postSd(thep);
   postSd.zeros();
   if(then>=thep){
+    // via svd
     arma::mat mymm1 = myv*postOmega;
     for(int k=0; k<thep; k++){
       postSd(k) = sqrt(myf(k, mymm1, trans(myv)));
     }
   }else{
+    // via the Woodbury identity (more stable)
     arma::mat myprod = myu * tempPostOmega * trans(myu);
     arma::mat mymm1 = trans(myX)*myprod;
     for(int k=0; k<thep; k++){

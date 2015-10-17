@@ -93,7 +93,7 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   cat("", nbedge, " selected edges out of ", edgeTot, " (",round(100*nbedge/edgeTot, 2),"%)", "", sep="")
   tps2 <- proc.time() - tps
   cat("\n\n")
-  cat("Time (steps 0 to 3):", .convertToTime(tps2[3]))
+  cat("Time (H:MM:SS):", .convertToTime(tps2[3]))
   #print(tps2)
   cat("\n\n")
 
