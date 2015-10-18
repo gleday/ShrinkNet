@@ -53,8 +53,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // varRidgeiOneIter
-Rcpp::List varRidgeiOneIter(int ii, Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit);
-RcppExport SEXP ShrinkNet_varRidgeiOneIter(SEXP iiSEXP, SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP) {
+Rcpp::List varRidgeiOneIter(int ii, Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light);
+RcppExport SEXP ShrinkNet_varRidgeiOneIter(SEXP iiSEXP, SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP, SEXP lightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -64,18 +64,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type bRand(bRandSEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type bRandStarInit(bRandStarInitSEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type dSigmaStarInit(dSigmaStarInitSEXP);
-    __result = Rcpp::wrap(varRidgeiOneIter(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit));
-    return __result;
-END_RCPP
-}
-// mydigamma
-arma::colvec mydigamma(arma::colvec vec);
-RcppExport SEXP ShrinkNet_mydigamma(SEXP vecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< arma::colvec >::type vec(vecSEXP);
-    __result = Rcpp::wrap(mydigamma(vec));
+    Rcpp::traits::input_parameter< bool >::type light(lightSEXP);
+    __result = Rcpp::wrap(varRidgeiOneIter(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light));
     return __result;
 END_RCPP
 }

@@ -243,7 +243,7 @@ double myf(int myk, arma::mat mm1, arma::mat mm2){
 }
 
 // [[Rcpp::export]]
-Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit){
+Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light){
   
   //Rcpp::Rcout << "ii= " << ii << std::endl;
   
@@ -310,25 +310,32 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
     L = arma::datum::nan;
   }
 
-  // Calculate posterior mean of beta
-  arma::colvec postMean = myv*postTheta;
-
-  // Calculate posterior sd of beta efficiently
+  // Initialize posterior mean, sd and ratio of beta
   arma::colvec postSd(thep);
   postSd.zeros();
-  if(then>=thep){
-    // via svd
-    arma::mat mymm1 = myv*postOmega;
-    for(int k=0; k<thep; k++){
-      postSd(k) = sqrt(myf(k, mymm1, trans(myv)));
+  arma::colvec postMean(thep);
+  postMean.zeros();
+  arma::colvec ratio(thep);
+  ratio.zeros();
+
+  // Calculation of posterior mean, sd and ratio of beta if light=false only
+  if(light ==  false){
+    postMean = myv*postTheta;
+    if(then>=thep){
+      // via svd
+      arma::mat mymm1 = myv*postOmega;
+      for(int k=0; k<thep; k++){
+        postSd(k) = sqrt(myf(k, mymm1, trans(myv)));
+      }
+    }else{
+      // via the Woodbury identity (more stable)
+      arma::mat myprod = myu * tempPostOmega * trans(myu);
+      arma::mat mymm1 = trans(myX)*myprod;
+      for(int k=0; k<thep; k++){
+        postSd(k) = sqrt(myf(k, mymm1, myX));
+      }
     }
-  }else{
-    // via the Woodbury identity (more stable)
-    arma::mat myprod = myu * tempPostOmega * trans(myu);
-    arma::mat mymm1 = trans(myX)*myprod;
-    for(int k=0; k<thep; k++){
-      postSd(k) = sqrt(myf(k, mymm1, myX));
-    }
+    ratio = arma::abs(postMean)/postSd;
   }
   
   //if(ii==1){
@@ -344,7 +351,6 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   //}
   
   // Output
-  arma::colvec ratio = arma::abs(postMean)/postSd;
   arma::mat postBeta;
   postBeta.insert_cols(postBeta.n_cols, postMean);
   postBeta.insert_cols(postBeta.n_cols, postSd);
@@ -365,7 +371,6 @@ Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand
   return Rcpp::List::create(Rcpp::Named("postBeta") = postBeta, Rcpp::Named("L") = L, Rcpp::Named("priorRand") = priorRand, Rcpp::Named("priorSig") = priorSig, Rcpp::Named("postRand") = postRand, Rcpp::Named("postSig") = postSig);
 }
 
-// [[Rcpp::export]]
 arma::colvec mydigamma(arma::colvec vec){
   arma::colvec out(vec.n_elem);
   for(int k = 0; k<vec.n_elem; k++){
@@ -409,26 +414,22 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
   while(mybool){
     Rcpp::Rcout << "iteration " << ct+1 << std::endl;
     
+    allbRandStar = allbRandStarnew;
+    allbRandStarnew.zeros();
+    alldSigmaStar = alldSigmaStarnew;
+    alldSigmaStarnew.zeros();
+    
     // Fit all models
     for(int j=0; j<SVDs.size(); j++){
       //Rcpp::Rcout << "j " << j+1 << std::endl;
-      tplist = Rcpp::as<Rcpp::List>(varRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar));
+      tplist = Rcpp::as<Rcpp::List>(varRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar, true));
       tpvals = Rcpp::as<arma::colvec>(tplist["postRand"]);
       tpvals2 = Rcpp::as<arma::colvec>(tplist["postSig"]);
       allaRandStar(j) = tpvals(0);
       allbRandStarnew(j) = tpvals(1);
       alldSigmaStarnew(j) = tpvals2(1);
       allmargs(ct,j) = Rcpp::as<double>(tplist["L"]);
-      tpmat = Rcpp::as<arma::mat>(tplist["postBeta"]);
-      idxs = arma::find(arma::linspace(1,SVDs.size(), SVDs.size())!=(j+1));
-      tpmat2.zeros();
-      tpmat2.elem(idxs) = tpmat.col(2);
-      matThres.col(j) = tpmat2;
     }
-    allbRandStar = allbRandStarnew;
-    allbRandStarnew.zeros();
-    alldSigmaStar = alldSigmaStarnew;
-    alldSigmaStarnew.zeros();
     
     // Variational Empirical Bayes using fixed-point iteration as in Valpola and Honkela (2006)
     if(globalShrink==1){
@@ -438,8 +439,8 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
       b1(0) = parTau(ct,1);
       int cpt = 1;
       bool mybool2 = true;
-      double tp = (allaRandStar.n_elem/sum(allaRandStar/allbRandStar));
-      double tp2 = mean(log(allbRandStar) - mydigamma(allaRandStar))-log(tp);
+      double tp = (allaRandStar.n_elem/sum(allaRandStar/allbRandStarnew));
+      double tp2 = mean(log(allbRandStarnew) - mydigamma(allaRandStar))-log(tp);
       while(mybool2){
         a1(cpt) = a1(cpt-1) + 0.5*(1/(R::digamma(a1(cpt-1))-log(a1(cpt-1)))) + 0.5*(1/tp2);
         b1(cpt) = a1(cpt)*tp;
@@ -454,31 +455,50 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
     }
     // Variational Empirical Bayes using approximate analytical solution as in Leday et al (2015)
     if(globalShrink==2){
-      double tp = sum(allaRandStar/allbRandStar);
-      double tp2 = mean(log(allbRandStar)-mydigamma(allaRandStar));
+      double tp = sum(allaRandStar/allbRandStarnew);
+      double tp2 = mean(log(allbRandStarnew)-mydigamma(allaRandStar));
       parTau(ct+1,0) = 0.5*(1/(log(tp)+tp2-log(SVDs.size())));
       parTau(ct+1,1) = parTau(ct+1,0)*SVDs.size()*(1/tp);
     }//end if
     
     // Monitor convergence
-    double maxDiffML;
+    double maxRelDiffML, diffTotalML;
     if(ct==(maxiter-1)){
       mybool = false;
     }else{
       if(ct>2){
         // Check relative increase for each variational lower bound
-        maxDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
-        //Rcpp::Rcout << ",  maxDiffML = " << maxDiffML << std::endl;
-        if(maxDiffML<tol){
-          mybool = false;
+        diffTotalML = sum(allmargs.row(ct))-sum(allmargs.row(ct-1));
+        maxRelDiffML = max(abs((allmargs.row(ct)-allmargs.row(ct-1))/allmargs.row(ct-1)));
+        //Rcpp::Rcout << ",  maxRelDiffML = " << maxRelDiffML << std::endl;
+        //Rcpp::Rcout << ",  diffTotalML = " << diffTotalML << std::endl;
+        if(diffTotalML>=0){
+          if(maxRelDiffML<tol || diffTotalML<0){
+            mybool = false;
+          }else{
+            ct++;
+          }
         }else{
-          ct++;
+          mybool = false;
+          ct--;
         }
       }else{
         ct++;
       }
     }
   }//end while
+  Rcpp::Rcout << "DONE" << std::endl;
+  
+  // Calculate posterior statistics
+  Rcpp::Rcout << "STEP 2: Calculate summary statistics from posteriors... ";
+  for(int j=0; j<SVDs.size(); j++){
+    tplist = Rcpp::as<Rcpp::List>(varRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar, false));
+    tpmat = Rcpp::as<arma::mat>(tplist["postBeta"]);
+    idxs = arma::find(arma::linspace(1,SVDs.size(), SVDs.size())!=(j+1));
+    tpmat2.zeros();
+    tpmat2.elem(idxs) = tpmat.col(2);
+    matThres.col(j) = tpmat2;
+  }
   Rcpp::Rcout << "DONE" << std::endl;
   
   // Symmetrize matThres

@@ -13,12 +13,8 @@ edgeSelection <- function(themat, tX, p0, maxedges, lfdrcut) {
     .Call('ShrinkNet_edgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, maxedges, lfdrcut)
 }
 
-varRidgeiOneIter <- function(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit) {
-    .Call('ShrinkNet_varRidgeiOneIter', PACKAGE = 'ShrinkNet', ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit)
-}
-
-mydigamma <- function(vec) {
-    .Call('ShrinkNet_mydigamma', PACKAGE = 'ShrinkNet', vec)
+varRidgeiOneIter <- function(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light) {
+    .Call('ShrinkNet_varRidgeiOneIter', PACKAGE = 'ShrinkNet', ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light)
 }
 
 varAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol) {

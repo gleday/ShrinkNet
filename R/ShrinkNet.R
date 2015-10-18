@@ -78,12 +78,12 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   eb <- varAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
 
   ##### Estimate p0
-  cat("STEP 2: Estimate p0... ")
+  cat("STEP 3: Estimate p0... ")
   p0 <- estimatep0(themat=eb$matThres, tX=tX, maxedges=maxedges)
   cat("DONE\n")
 
   ##### Edge selection using Bayesian local false discovery rate
-  cat("STEP 3: Edge selection... ")
+  cat("STEP 4: Edge selection... ")
   selGraph <- edgeSelection(themat=eb$matThres, tX=tX, p0=p0, maxedges=maxedges, lfdrcut=blfdr)
   cat("DONE\n\n")
 
