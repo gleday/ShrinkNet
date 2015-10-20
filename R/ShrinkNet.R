@@ -76,6 +76,12 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   allSVDs <- sapply(1:nrow(tX), HiddenGetSVD, tX=tX, simplify=FALSE)
   cat("DONE\n")
   
+#   sfInit(parallel=TRUE, cpus=8)
+#   sfLibrary(ShrinkNet)
+#   allSVDs <- sfSapply(1:nrow(tX), ShrinkNet:::HiddenGetSVD, tX=tX, simplify=FALSE)
+#   sfRemoveAll()
+#   sfStop()
+  
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")
   eb <- HiddenVarAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
