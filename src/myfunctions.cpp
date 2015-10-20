@@ -4,7 +4,7 @@
 #include <Rcpp.h>
 
 // [[Rcpp::export]]
-double varRidgei(int ii,  Rcpp::NumericMatrix tX, double aRand, double bRand, double cSigma, double dSigma, int maxiter, arma::colvec varSel){
+double HiddenVarRidgei(int ii,  Rcpp::NumericMatrix tX, double aRand, double bRand, double cSigma, double dSigma, int maxiter, arma::colvec varSel){
   
   //Rcpp::Rcout << "ii= " << ii << std::endl;
   
@@ -88,7 +88,7 @@ double varRidgei(int ii,  Rcpp::NumericMatrix tX, double aRand, double bRand, do
 }
 
 // [[Rcpp::export]]
-double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedges){
+double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedges){
   
   using arma::trans;
   
@@ -101,10 +101,9 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
   arma::mat tempGraph = arma::zeros(themat.nrow(),themat.ncol());
   arma::colvec allML(themat.nrow());
   for(int j=1; j<=tX.nrow(); j++){
-    allML(j-1) = varRidgei(j, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, arma::zeros(tX.nrow()-1));
+    allML(j-1) = HiddenVarRidgei(j, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, arma::zeros(tX.nrow()-1));
   }
   double logML01, logML02, logML11, logML12;
-  double L1, L2;
   arma::mat logBFs(maxedges,2);
   logBFs.zeros();
   arma::colvec p0(maxedges);
@@ -124,8 +123,8 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
     // Obtain ML for the two regression equations that include to this edge
     arma::colvec varSel1 = tempGraph.col(newedge(1));
     arma::colvec varSel2 = tempGraph.col(newedge(0));
-    logML11 = varRidgei(newedge(1)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel1.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(1)+1))));
-    logML12 = varRidgei(newedge(0)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel2.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(0)+1))));
+    logML11 = HiddenVarRidgei(newedge(1)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel1.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(1)+1))));
+    logML12 = HiddenVarRidgei(newedge(0)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel2.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(0)+1))));
     allML(newedge(1)) = logML11;
     allML(newedge(0)) = logML12;
     
@@ -166,7 +165,7 @@ double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedg
 }
 
 // [[Rcpp::export]]
-arma::mat edgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, int maxedges, double lfdrcut){
+arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, int maxedges, double lfdrcut){
   
   using arma::trans;
   
@@ -180,10 +179,9 @@ arma::mat edgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, doub
   arma::mat myGraph = arma::zeros(themat.nrow(),themat.ncol());
   arma::colvec allML(themat.nrow());
   for(int j=1; j<=tX.nrow(); j++){
-    allML(j-1) = varRidgei(j, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, arma::zeros(tX.nrow()-1));
+    allML(j-1) = HiddenVarRidgei(j, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, arma::zeros(tX.nrow()-1));
   }
   double logML01, logML02, logML11, logML12;
-  double L1, L2;
   int cpt = 0;
   int ctstop = 0;
   bool mybool = true;
@@ -202,8 +200,8 @@ arma::mat edgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, doub
     // Obtain ML for the two regression equations that include to this edge
     arma::colvec varSel1 = tempGraph.col(newedge(1));
     arma::colvec varSel2 = tempGraph.col(newedge(0));
-    logML11 = varRidgei(newedge(1)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel1.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(1)+1))));
-    logML12 = varRidgei(newedge(0)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel2.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(0)+1))));
+    logML11 = HiddenVarRidgei(newedge(1)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel1.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(1)+1))));
+    logML12 = HiddenVarRidgei(newedge(0)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel2.elem(arma::find(arma::linspace(1,tX.nrow(), tX.nrow())!=(newedge(0)+1))));
     
     // logarithm of Bayes factors
     logBFs(0) = logML11-logML01;
@@ -243,7 +241,7 @@ double myf(int myk, arma::mat mm1, arma::mat mm2){
 }
 
 // [[Rcpp::export]]
-Rcpp::List varRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light){
+Rcpp::List HiddenVarRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light){
   
   //Rcpp::Rcout << "ii= " << ii << std::endl;
   
@@ -380,7 +378,7 @@ arma::colvec mydigamma(arma::colvec vec){
 }
 
 // [[Rcpp::export]]
-Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol){
+Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol){
   
   // Initialization
   arma::mat allmargs(maxiter+1, SVDs.size());
@@ -422,7 +420,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
     // Fit all models
     for(int j=0; j<SVDs.size(); j++){
       //Rcpp::Rcout << "j " << j+1 << std::endl;
-      tplist = Rcpp::as<Rcpp::List>(varRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar, true));
+      tplist = Rcpp::as<Rcpp::List>(HiddenVarRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar, true));
       tpvals = Rcpp::as<arma::colvec>(tplist["postRand"]);
       tpvals2 = Rcpp::as<arma::colvec>(tplist["postSig"]);
       allaRandStar(j) = tpvals(0);
@@ -492,7 +490,7 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
   // Calculate posterior statistics
   Rcpp::Rcout << "STEP 2: Calculate summary statistics from posteriors... ";
   for(int j=0; j<SVDs.size(); j++){
-    tplist = Rcpp::as<Rcpp::List>(varRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar, false));
+    tplist = Rcpp::as<Rcpp::List>(HiddenVarRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar, false));
     tpmat = Rcpp::as<arma::mat>(tplist["postBeta"]);
     idxs = arma::find(arma::linspace(1,SVDs.size(), SVDs.size())!=(j+1));
     tpmat2.zeros();
@@ -506,3 +504,38 @@ Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int
   
   return Rcpp::List::create(Rcpp::Named("matThres") = matThres, Rcpp::Named("parTau") = parTau.rows(0,ct), Rcpp::Named("allmargs") = allmargs.rows(0,ct));
 }//end varAlgo
+
+// [[Rcpp::export]]
+Rcpp::List HiddenGetSVD(int ii,  Rcpp::NumericMatrix tX){
+  
+  using arma::trans;
+  
+  // Data
+  arma::mat tXbis(tX.begin(),tX.nrow(),tX.ncol(),false);
+  arma::colvec myy = trans(tXbis.row(ii-1));
+  arma::mat myX = trans(tXbis.rows(arma::find(arma::linspace(1,tXbis.n_rows, tXbis.n_rows)!=ii)));
+  int then = myX.n_rows;
+  int thep = myX.n_cols;
+  
+  // Fast SVD along the lines of the R package corpcor
+  arma::mat u;
+  arma::colvec d;
+  arma::mat v;
+  if(then >= thep){
+    arma::mat XTX = myX.t()*myX;
+    arma::svd_econ(u,d,v,XTX,"right");
+    d = sqrt(d);
+    u = myX*v*arma::diagmat(1/d);
+  }
+  else{
+    arma::mat XXT = myX*myX.t();
+    arma::svd_econ(u,d,v,XXT,"left");
+    d = sqrt(d);
+    v = myX.t()*u*arma::diagmat(1/d);
+  }
+  
+  arma::mat myF = u*arma::diagmat(d);
+  arma::mat FTF = myF.t() * myF;
+
+  return Rcpp::List::create(Rcpp::Named("u") = u, Rcpp::Named("d") = d, Rcpp::Named("v") = v, Rcpp::Named("myF") = myF, Rcpp::Named("FTF") = FTF, Rcpp::Named("myy") = myy, Rcpp::Named("myX") = myX);
+}

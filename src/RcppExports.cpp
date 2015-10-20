@@ -6,9 +6,9 @@
 
 using namespace Rcpp;
 
-// varRidgei
-double varRidgei(int ii, Rcpp::NumericMatrix tX, double aRand, double bRand, double cSigma, double dSigma, int maxiter, arma::colvec varSel);
-RcppExport SEXP ShrinkNet_varRidgei(SEXP iiSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP cSigmaSEXP, SEXP dSigmaSEXP, SEXP maxiterSEXP, SEXP varSelSEXP) {
+// HiddenVarRidgei
+double HiddenVarRidgei(int ii, Rcpp::NumericMatrix tX, double aRand, double bRand, double cSigma, double dSigma, int maxiter, arma::colvec varSel);
+RcppExport SEXP ShrinkNet_HiddenVarRidgei(SEXP iiSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP cSigmaSEXP, SEXP dSigmaSEXP, SEXP maxiterSEXP, SEXP varSelSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -20,26 +20,26 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type dSigma(dSigmaSEXP);
     Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type varSel(varSelSEXP);
-    __result = Rcpp::wrap(varRidgei(ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSel));
+    __result = Rcpp::wrap(HiddenVarRidgei(ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSel));
     return __result;
 END_RCPP
 }
-// estimatep0
-double estimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedges);
-RcppExport SEXP ShrinkNet_estimatep0(SEXP thematSEXP, SEXP tXSEXP, SEXP maxedgesSEXP) {
+// HiddenEstimatep0
+double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedges);
+RcppExport SEXP ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP, SEXP maxedgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type themat(thematSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
     Rcpp::traits::input_parameter< int >::type maxedges(maxedgesSEXP);
-    __result = Rcpp::wrap(estimatep0(themat, tX, maxedges));
+    __result = Rcpp::wrap(HiddenEstimatep0(themat, tX, maxedges));
     return __result;
 END_RCPP
 }
-// edgeSelection
-arma::mat edgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, int maxedges, double lfdrcut);
-RcppExport SEXP ShrinkNet_edgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP maxedgesSEXP, SEXP lfdrcutSEXP) {
+// HiddenEdgeSelection
+arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, int maxedges, double lfdrcut);
+RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP maxedgesSEXP, SEXP lfdrcutSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -48,13 +48,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type p0(p0SEXP);
     Rcpp::traits::input_parameter< int >::type maxedges(maxedgesSEXP);
     Rcpp::traits::input_parameter< double >::type lfdrcut(lfdrcutSEXP);
-    __result = Rcpp::wrap(edgeSelection(themat, tX, p0, maxedges, lfdrcut));
+    __result = Rcpp::wrap(HiddenEdgeSelection(themat, tX, p0, maxedges, lfdrcut));
     return __result;
 END_RCPP
 }
-// varRidgeiOneIter
-Rcpp::List varRidgeiOneIter(int ii, Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light);
-RcppExport SEXP ShrinkNet_varRidgeiOneIter(SEXP iiSEXP, SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP, SEXP lightSEXP) {
+// HiddenVarRidgeiOneIter
+Rcpp::List HiddenVarRidgeiOneIter(int ii, Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light);
+RcppExport SEXP ShrinkNet_HiddenVarRidgeiOneIter(SEXP iiSEXP, SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP, SEXP lightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -65,13 +65,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::colvec >::type bRandStarInit(bRandStarInitSEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type dSigmaStarInit(dSigmaStarInitSEXP);
     Rcpp::traits::input_parameter< bool >::type light(lightSEXP);
-    __result = Rcpp::wrap(varRidgeiOneIter(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light));
+    __result = Rcpp::wrap(HiddenVarRidgeiOneIter(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light));
     return __result;
 END_RCPP
 }
-// varAlgo
-Rcpp::List varAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol);
-RcppExport SEXP ShrinkNet_varAlgo(SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP) {
+// HiddenVarAlgo
+Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol);
+RcppExport SEXP ShrinkNet_HiddenVarAlgo(SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -81,7 +81,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
     Rcpp::traits::input_parameter< int >::type globalShrink(globalShrinkSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    __result = Rcpp::wrap(varAlgo(SVDs, aRand, bRand, maxiter, globalShrink, tol));
+    __result = Rcpp::wrap(HiddenVarAlgo(SVDs, aRand, bRand, maxiter, globalShrink, tol));
+    return __result;
+END_RCPP
+}
+// HiddenGetSVD
+Rcpp::List HiddenGetSVD(int ii, Rcpp::NumericMatrix tX);
+RcppExport SEXP ShrinkNet_HiddenGetSVD(SEXP iiSEXP, SEXP tXSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type ii(iiSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
+    __result = Rcpp::wrap(HiddenGetSVD(ii, tX));
     return __result;
 END_RCPP
 }

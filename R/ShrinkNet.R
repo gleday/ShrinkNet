@@ -34,6 +34,9 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   if(!is.matrix(tX)){
     stop("tX is not a matrix")
   }
+  if(any(is.na(tX))){
+    stop("Missing values are not allowed")
+  }
   if(is.numeric(globalShrink)){
     if(!any(globalShrink==c(1,2))){
       stop("globalShrink should be equal to 1 or 2")
@@ -70,21 +73,21 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   ##### Data preparation
   cat("\n")
   cat("STEP 0: SVD computations... ")
-  allSVDs <- sapply(1:nrow(tX), .getSVD, tX=tX, simplify=FALSE)
+  allSVDs <- sapply(1:nrow(tX), HiddenGetSVD, tX=tX, simplify=FALSE)
   cat("DONE\n")
   
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")
-  eb <- varAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
+  eb <- HiddenVarAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
 
   ##### Estimate p0
   cat("STEP 3: Estimate p0... ")
-  p0 <- estimatep0(themat=eb$matThres, tX=tX, maxedges=maxedges)
+  p0 <- HiddenEstimatep0(themat=eb$matThres, tX=tX, maxedges=maxedges)
   cat("DONE\n")
 
   ##### Edge selection using Bayesian local false discovery rate
   cat("STEP 4: Edge selection... ")
-  selGraph <- edgeSelection(themat=eb$matThres, tX=tX, p0=p0, maxedges=maxedges, lfdrcut=blfdr)
+  selGraph <- HiddenEdgeSelection(themat=eb$matThres, tX=tX, p0=p0, maxedges=maxedges, lfdrcut=blfdr)
   cat("DONE\n\n")
 
   cat("prior null probability p0 = ", round(p0,5), "\n")
