@@ -64,6 +64,12 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   }else{
     stop("blfdr is not a numeric")
   }
+  if(ncpus>1){
+    if(max(dim(tX))<100){
+      ncpus <- 1
+      warnings("max(n,p)<100: No parallel computations")
+    }
+  }
 
   tps <- proc.time()
 
