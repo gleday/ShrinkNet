@@ -9,7 +9,11 @@ getSVD(ii, tX)
 \arguments{
 \item{ii}{integer. Gene index.}
 
+<<<<<<< HEAD
 \item{tX}{Data matrix.}
+=======
+\item{tX}{p by n matrix of gene expression.}
+>>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
 }
 \value{
 A named list with the following elements:
@@ -18,8 +22,13 @@ A named list with the following elements:
  \item{v}{A matrix containing the right singular vectors.}
  \item{myF}{A matrix representing the crossproduct u*diag(D).}
  \item{FTF}{A matrix representing the crossproduct t(myF)*myF.}
+<<<<<<< HEAD
  \item{myy}{A vector containing the n expression values for gene ii.}
  \item{myX}{A n by p-1 matrix containing the expression values for all genes other than ii.}
+=======
+ \item{myy}{A vector containing expression values for gene ii.}
+ \item{myX}{A n by p-1 matrix containing expression values for all genes other than ii.}
+>>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
 }
 \description{
 Convenience function for singular value decomposition

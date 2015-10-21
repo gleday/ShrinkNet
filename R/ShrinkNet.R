@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 #' Undirected network inference using a Bayesian SEM
+=======
+#' gene network reconstruction using global-local shrinkage priors
+>>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
 #'
 #' @param tX p by n data matrix
 #' @param globalShrink either 1 or 2. See Details.
-#' @param blfdr Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.
+#' @param blfdr numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.
 #' @param maxiter integer. Maximum number of iterations for the variational algorithm. Default is 100.
 #' @param maxedges integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.
 #' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
@@ -64,6 +68,12 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   }else{
     stop("blfdr is not a numeric")
   }
+  if(ncpus>1){
+    if(max(dim(tX))<100){
+      ncpus <- 1
+      warnings("max(n,p)<100: No parallel computations")
+    }
+  }
 
   tps <- proc.time()
 
@@ -78,7 +88,10 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
     allSVDs <- sapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
   }else{
     snowfall::sfInit(parallel=TRUE, cpus=ncpus)
+<<<<<<< HEAD
     #sfExport(list=c("getSVD","ShrinkNet_getSVD"))
+=======
+>>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
     snowfall::sfLibrary(ShrinkNet)
     allSVDs <- snowfall::sfSapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
     snowfall::sfRemoveAll()
@@ -86,7 +99,10 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   }
   cat("DONE\n")
   
+<<<<<<< HEAD
   
+=======
+>>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")
   eb <- HiddenVarAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)
