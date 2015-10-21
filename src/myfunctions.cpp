@@ -506,7 +506,7 @@ Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxite
 }//end varAlgo
 
 // [[Rcpp::export]]
-Rcpp::List HiddenGetSVD(int ii,  Rcpp::NumericMatrix tX){
+Rcpp::List getSVD(int ii,  Rcpp::NumericMatrix tX){
   
   using arma::trans;
   

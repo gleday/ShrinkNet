@@ -1,4 +1,5 @@
 useDynLib(ShrinkNet)
 exportPattern("^[^\\Hidden]")
 importFrom(Rcpp, evalCpp)
-export(ShrinkNet)
+importFrom(snowfall, sfInit, sfExport, sfSapply, sfStop, sfLibrary, sfRemoveAll)
+export(ShrinkNet, getSVD)

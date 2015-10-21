@@ -21,7 +21,7 @@ HiddenVarAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol) {
     .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink, tol)
 }
 
-HiddenGetSVD <- function(ii, tX) {
-    .Call('ShrinkNet_HiddenGetSVD', PACKAGE = 'ShrinkNet', ii, tX)
+getSVD <- function(ii, tX) {
+    .Call('ShrinkNet_getSVD', PACKAGE = 'ShrinkNet', ii, tX)
 }
 

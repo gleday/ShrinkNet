@@ -5,7 +5,7 @@
 \title{Undirected network inference using a Bayesian SEM and a posteriori edge selection}
 \usage{
 ShrinkNet(tX, globalShrink = 1, blfdr = 0.1, maxiter = 100, tol = 0.001,
-  maxedges = NULL)
+  maxedges = NULL, ncpus = 1)
 }
 \arguments{
 \item{tX}{p by n data matrix}
@@ -19,6 +19,8 @@ ShrinkNet(tX, globalShrink = 1, blfdr = 0.1, maxiter = 100, tol = 0.001,
 \item{tol}{numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.}
 
 \item{maxedges}{integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.}
+
+\item{ncpus}{integer. Number of cpu cores to be used.}
 }
 \value{
 A named list with the following elements:
