@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-#' Undirected network inference using a Bayesian SEM
-=======
 #' gene network reconstruction using global-local shrinkage priors
->>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
 #'
 #' @param tX p by n data matrix
 #' @param globalShrink either 1 or 2. See Details.
@@ -88,10 +84,6 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
     allSVDs <- sapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
   }else{
     snowfall::sfInit(parallel=TRUE, cpus=ncpus)
-<<<<<<< HEAD
-    #sfExport(list=c("getSVD","ShrinkNet_getSVD"))
-=======
->>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
     snowfall::sfLibrary(ShrinkNet)
     allSVDs <- snowfall::sfSapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
     snowfall::sfRemoveAll()
@@ -99,10 +91,6 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   }
   cat("DONE\n")
   
-<<<<<<< HEAD
-  
-=======
->>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")
   eb <- HiddenVarAlgo(SVDs=allSVDs, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol)

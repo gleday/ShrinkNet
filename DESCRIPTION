@@ -5,12 +5,8 @@ Version: 1.0
 Date: 2015-09-08
 Author: Gwenael G.R. Leday <gwenael.leday@mrc-bsu.cam.ac.uk>
 Maintainer: Gwenael G.R. Leday <gwenael.leday@mrc-bsu.cam.ac.uk>
-<<<<<<< HEAD
-Imports: Matrix, Rcpp (>= 0.11.4), snowfall
-=======
 Imports: Matrix, Rcpp (>= 0.11.4)
 Depends: snowfall
->>>>>>> 0b519ab37c670e4c845d9e7cf6d9d05add6ff0ec
 Description: The present package implements a variational algorithm to fit a Bayesian simultaneous-equation model with global and local shrinkage priors, as well as a posterior thresholding procedure to infer the network structure.
 LazyLoad: yes
 License: GPL (>=2.0)
