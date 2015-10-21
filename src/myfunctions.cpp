@@ -506,7 +506,7 @@ Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxite
 }//end varAlgo
 
 // [[Rcpp::export]]
-Rcpp::List HiddenGetSVD(int ii,  Rcpp::NumericMatrix tX){
+Rcpp::List getSVD(int ii,  Rcpp::NumericMatrix tX){
   
   using arma::trans;
   
@@ -517,7 +517,7 @@ Rcpp::List HiddenGetSVD(int ii,  Rcpp::NumericMatrix tX){
   int then = myX.n_rows;
   int thep = myX.n_cols;
   
-  // Fast SVD along the lines of the R package corpcor
+  // Fast SVD along the lines of the R function fast.svd() in package corpcor
   arma::mat u;
   arma::colvec d;
   arma::mat v;

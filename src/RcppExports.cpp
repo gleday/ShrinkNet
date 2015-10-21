@@ -85,15 +85,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// HiddenGetSVD
-Rcpp::List HiddenGetSVD(int ii, Rcpp::NumericMatrix tX);
-RcppExport SEXP ShrinkNet_HiddenGetSVD(SEXP iiSEXP, SEXP tXSEXP) {
+// getSVD
+Rcpp::List getSVD(int ii, Rcpp::NumericMatrix tX);
+RcppExport SEXP ShrinkNet_getSVD(SEXP iiSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< int >::type ii(iiSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
-    __result = Rcpp::wrap(HiddenGetSVD(ii, tX));
+    __result = Rcpp::wrap(getSVD(ii, tX));
     return __result;
 END_RCPP
 }

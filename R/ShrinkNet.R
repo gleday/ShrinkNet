@@ -1,11 +1,12 @@
-#' Undirected network inference using a Bayesian SEM and a posteriori edge selection
+#' gene network reconstruction using global-local shrinkage priors
 #'
 #' @param tX p by n data matrix
 #' @param globalShrink either 1 or 2. See Details.
-#' @param blfdr Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.
+#' @param blfdr numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.
 #' @param maxiter integer. Maximum number of iterations for the variational algorithm. Default is 100.
 #' @param maxedges integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.
 #' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
+#' @param ncpus integer. Number of cpu cores to be used.
 #' @details
 #' If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
 #' fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
@@ -28,7 +29,7 @@
 #'  \item{time}{Running time of ShrinkNet.}
 #' @author Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
 #' @export
-ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, maxedges=NULL){
+ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, maxedges=NULL, ncpus=1){
 
   ##### Input checks
   if(!is.matrix(tX)){
@@ -73,14 +74,16 @@ ShrinkNet <- function(tX, globalShrink=1, blfdr=0.1, maxiter=100, tol=0.001, max
   ##### Data preparation
   cat("\n")
   cat("STEP 0: SVD computations... ")
-  allSVDs <- sapply(1:nrow(tX), HiddenGetSVD, tX=tX, simplify=FALSE)
+  if(ncpus==1){
+    allSVDs <- sapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
+  }else{
+    snowfall::sfInit(parallel=TRUE, cpus=ncpus)
+    snowfall::sfLibrary(ShrinkNet)
+    allSVDs <- snowfall::sfSapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
+    snowfall::sfRemoveAll()
+    snowfall::sfStop()
+  }
   cat("DONE\n")
-  
-#   sfInit(parallel=TRUE, cpus=8)
-#   sfLibrary(ShrinkNet)
-#   allSVDs <- sfSapply(1:nrow(tX), ShrinkNet:::HiddenGetSVD, tX=tX, simplify=FALSE)
-#   sfRemoveAll()
-#   sfStop()
   
   ##### Algo
   cat("STEP 1: Variational algorithm...\n")

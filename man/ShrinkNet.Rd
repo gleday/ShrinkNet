@@ -2,23 +2,25 @@
 % Please edit documentation in R/ShrinkNet.R
 \name{ShrinkNet}
 \alias{ShrinkNet}
-\title{Undirected network inference using a Bayesian SEM and a posteriori edge selection}
+\title{gene network reconstruction using global-local shrinkage priors}
 \usage{
 ShrinkNet(tX, globalShrink = 1, blfdr = 0.1, maxiter = 100, tol = 0.001,
-  maxedges = NULL)
+  maxedges = NULL, ncpus = 1)
 }
 \arguments{
 \item{tX}{p by n data matrix}
 
 \item{globalShrink}{either 1 or 2. See Details.}
 
-\item{blfdr}{Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
+\item{blfdr}{numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
 
 \item{maxiter}{integer. Maximum number of iterations for the variational algorithm. Default is 100.}
 
 \item{tol}{numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.}
 
 \item{maxedges}{integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.}
+
+\item{ncpus}{integer. Number of cpu cores to be used.}
 }
 \value{
 A named list with the following elements:
@@ -32,7 +34,7 @@ A named list with the following elements:
  \item{time}{Running time of ShrinkNet.}
 }
 \description{
-Undirected network inference using a Bayesian SEM and a posteriori edge selection
+gene network reconstruction using global-local shrinkage priors
 }
 \details{
 If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
