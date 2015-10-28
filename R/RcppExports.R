@@ -5,20 +5,24 @@ HiddenVarRidgei <- function(ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSe
     .Call('ShrinkNet_HiddenVarRidgei', PACKAGE = 'ShrinkNet', ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSel)
 }
 
-HiddenEstimatep0 <- function(themat, tX, maxedges) {
-    .Call('ShrinkNet_HiddenEstimatep0', PACKAGE = 'ShrinkNet', themat, tX, maxedges)
+HiddenEdgeBFprime <- function(idx, themat, tX) {
+    .Call('ShrinkNet_HiddenEdgeBFprime', PACKAGE = 'ShrinkNet', idx, themat, tX)
 }
 
-HiddenEdgeSelection <- function(themat, tX, p0, maxedges, lfdrcut) {
-    .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, maxedges, lfdrcut)
+HiddenEstimatep0 <- function(themat, tX) {
+    .Call('ShrinkNet_HiddenEstimatep0', PACKAGE = 'ShrinkNet', themat, tX)
 }
 
-HiddenVarRidgeiOneIter <- function(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light) {
-    .Call('ShrinkNet_HiddenVarRidgeiOneIter', PACKAGE = 'ShrinkNet', ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light)
+HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut) {
+    .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut)
 }
 
-HiddenVarAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol) {
-    .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink, tol)
+HiddenVarRidgeiGetKappa <- function(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit) {
+    .Call('ShrinkNet_HiddenVarRidgeiGetKappa', PACKAGE = 'ShrinkNet', ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit)
+}
+
+HiddenVarAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose) {
+    .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose)
 }
 
 getSVD <- function(ii, tX) {

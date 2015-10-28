@@ -2,15 +2,21 @@
 % Please edit documentation in R/ShrinkNet.R
 \name{ShrinkNet}
 \alias{ShrinkNet}
-\title{gene network reconstruction using global-local shrinkage priors}
+\title{Gene network reconstruction using global-local shrinkage priors}
 \usage{
-ShrinkNet(tX, globalShrink = 1, blfdr = 0.1, maxiter = 100, tol = 0.001,
-  maxedges = NULL, ncpus = 1)
+ShrinkNet(tX, globalShrink = 1, methodp0 = "exact", nsamp = 1000,
+  ncpus = 1, blfdr = 0.1, maxiter = 100, tol = 0.001, verbose = TRUE)
 }
 \arguments{
-\item{tX}{p by n data matrix}
+\item{tX}{p by n data matrix of scaled gene expression measurements}
 
-\item{globalShrink}{either 1 or 2. See Details.}
+\item{globalShrink}{integer. Either 1 or 2. See Details.}
+
+\item{methodp0}{character. Either "exact" or "sampling". See Details.}
+
+\item{nsamp}{integer. Number of randomly selected edges to estimate p0. Only when methodp0="sampling". See Details.}
+
+\item{ncpus}{integer. Number of cpu cores to be used.}
 
 \item{blfdr}{numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
 
@@ -18,13 +24,11 @@ ShrinkNet(tX, globalShrink = 1, blfdr = 0.1, maxiter = 100, tol = 0.001,
 
 \item{tol}{numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.}
 
-\item{maxedges}{integer. Maximum number of edges to consider for forward selection. Default is 0.25*p*(p-1). See Details.}
-
-\item{ncpus}{integer. Number of cpu cores to be used.}
+\item{verbose}{logical. Should information on progress be printed?}
 }
 \value{
 A named list with the following elements:
- \item{adjacency}{A sparse matrix containing the adjacency matrix corresponding to the selected graph.}
+ \item{adjacency}{A sparse matrix of class \code{\link[Matrix]{dsCMatrix-class}} containing the adjacency matrix corresponding to the selected graph.}
  \item{p0}{A number giving the estimate of the proportion of null hypothesis.}
  \item{kappabar}{A matrix containing scores used to rank edges.}
  \item{globalPrior}{A matrix containing the (shape and rate) parameters of the global shrinkage prior
@@ -34,19 +38,28 @@ A named list with the following elements:
  \item{time}{Running time of ShrinkNet.}
 }
 \description{
-gene network reconstruction using global-local shrinkage priors
+Gene network reconstruction using global-local shrinkage priors
 }
 \details{
+The function enables the reconstruction an undirected network given data.
+Although the tool was primarily developed to analyse mRNA expression data,
+the method is general and can be applied to any data set for which it is reasonable to
+assume a multivariate Gaussian model. This typically include molecular data generated from
+a microarray-based technology such as protein expression data (e.g. as produced by reverse-phase protein arrays)
+and microRNA data.
+
+\code{ShrinkNet} aims to be computationally efficient. Core functions are implemented in C++ using
+the Rcpp and RcppArmadillo software packages and SVD decompositions are employed to speed up the
+variational algorithm. Furthermore, functions in the package has been designed so that the most
+computationally intensive steps can be parallelized.
+
 If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
 fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
 the approximate analytical solution of Leday et al (2015) is used.
 
-The edge selection procedure respects the ranking on edges in terms of the order in which
-they are considered in the forward selection. However, because the Bayes factor generally
-decreases with the rank, it may be pratical to avoid investigating all P=0.5*p*(p-1)
-possible edges since a large part of them are not important. The argument \code{maxedges}
-specifies the maximum number of edges to consider both for calculating p0 and the forward
-selection procedure. The default is 0.5*P.
+If \code{methodp0}="exact", all P=0.5*p*(p-1) edges are investigated whereas if \code{methodp0}="sampling"
+a random subset of size \code{nsamp} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
+\code{methodp0}="sampling" otherwise with \code{nsamp} being greater than 1000.
 }
 \author{
 Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
