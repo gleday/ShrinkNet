@@ -41,7 +41,7 @@ A named list with the following elements:
 Gene network reconstruction using global-local shrinkage priors
 }
 \details{
-The function enables the reconstruction an undirected network given data.
+The function enables the reconstruction of an undirected network given data.
 Although the tool was primarily developed to analyse mRNA expression data,
 the method is general and can be applied to any data set for which it is reasonable to
 assume a multivariate Gaussian model. This typically include molecular data generated from

@@ -7,17 +7,10 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 ## Description
 
-**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data. 
-Although it was primarily developed to analyse mRNA expression data, the method is general and
-can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model.
-In genomics, this typically include molecular data generated from a microarray technologies.
-Hence, **ShrinkNet** can in principle be used to analyse protein expression data (e.g. as produced by
+**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data. Although it was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this typically include molecular data generated from a microarray technologies. Hence, ShrinkNet can in principle be used to analyse protein expression data (e.g. as produced by
 reverse-phase protein arrays), microRNA and metabolomic data.
 
-**ShrinkNet** aims to be computationally efficient. Core functions are implemented in C++ using
-the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages and
-SVD decompositions are employed to speed up the variational algorithm.
-Furthermore, functions in the package has been designed so that the most
+ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages and SVD decompositions are employed to speed up the variational algorithm. Furthermore, functions in the package has been designed so that the most
 computationally intensive steps can be parallelized.
 
 ## Installation

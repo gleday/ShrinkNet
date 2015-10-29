@@ -10,7 +10,7 @@
 #' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
 #' @param verbose logical. Should information on progress be printed?
 #' @details
-#' The function enables the reconstruction an undirected network given data. 
+#' The function enables the reconstruction of an undirected network given data. 
 #' Although the tool was primarily developed to analyse mRNA expression data,
 #' the method is general and can be applied to any data set for which it is reasonable to
 #' assume a multivariate Gaussian model. This typically include molecular data generated from
@@ -119,6 +119,7 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
   if(ncpus==1){
     allSVDs <- sapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
   }else{
+    cat("\n")
     snowfall::sfInit(parallel=TRUE, cpus=ncpus)
     snowfall::sfLibrary(ShrinkNet)
     allSVDs <- snowfall::sfSapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
