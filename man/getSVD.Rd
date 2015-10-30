@@ -24,4 +24,8 @@ A named list with the following elements:
 \description{
 Convenience function for singular value decomposition
 }
+\details{
+The function returns the singular value decomposition of X_{ii}=UDV^T where
+X_{ii} is the transpose of tX_{ii} which represents the matrix tX without the iith row.
+}
 

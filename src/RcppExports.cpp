@@ -24,31 +24,42 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// HiddenEdgeBFprime
+arma::colvec HiddenEdgeBFprime(Rcpp::NumericVector idx, Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
+RcppExport SEXP ShrinkNet_HiddenEdgeBFprime(SEXP idxSEXP, SEXP thematSEXP, SEXP tXSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type themat(thematSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
+    __result = Rcpp::wrap(HiddenEdgeBFprime(idx, themat, tX));
+    return __result;
+END_RCPP
+}
 // HiddenEstimatep0
-double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, int maxedges);
-RcppExport SEXP ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP, SEXP maxedgesSEXP) {
+Rcpp::List HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
+RcppExport SEXP ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type themat(thematSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
-    Rcpp::traits::input_parameter< int >::type maxedges(maxedgesSEXP);
-    __result = Rcpp::wrap(HiddenEstimatep0(themat, tX, maxedges));
+    __result = Rcpp::wrap(HiddenEstimatep0(themat, tX));
     return __result;
 END_RCPP
 }
 // HiddenEdgeSelection
-arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, int maxedges, double lfdrcut);
-RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP maxedgesSEXP, SEXP lfdrcutSEXP) {
+arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut);
+RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP lfdrcutSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type themat(thematSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
     Rcpp::traits::input_parameter< double >::type p0(p0SEXP);
-    Rcpp::traits::input_parameter< int >::type maxedges(maxedgesSEXP);
     Rcpp::traits::input_parameter< double >::type lfdrcut(lfdrcutSEXP);
-    __result = Rcpp::wrap(HiddenEdgeSelection(themat, tX, p0, maxedges, lfdrcut));
+    __result = Rcpp::wrap(HiddenEdgeSelection(themat, tX, p0, lfdrcut));
     return __result;
 END_RCPP
 }
@@ -70,8 +81,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // HiddenVarAlgo
-Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol);
-RcppExport SEXP ShrinkNet_HiddenVarAlgo(SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP) {
+Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol, bool verbose);
+RcppExport SEXP ShrinkNet_HiddenVarAlgo(SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -81,7 +92,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
     Rcpp::traits::input_parameter< int >::type globalShrink(globalShrinkSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    __result = Rcpp::wrap(HiddenVarAlgo(SVDs, aRand, bRand, maxiter, globalShrink, tol));
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    __result = Rcpp::wrap(HiddenVarAlgo(SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose));
     return __result;
 END_RCPP
 }
