@@ -31,11 +31,9 @@ library(ShrinkNet)
 
 ## Example 1
 
-**Data:** gene expression data (B-lymphocyte cells) analysed by Mohammadi and Wit (2015) 
-
-**Samples:** 60 unrelated individuals
-
-**Variables:** 100 most variables probes/genes
+- **Data:** gene expression data (B-lymphocyte cells) analysed by Mohammadi and Wit (2015) 
+- **Samples:** 60 unrelated individuals
+- **Variables:** 100 most variables probes/genes
 
 ```R
 # Load library
