@@ -35,6 +35,8 @@ library(ShrinkNet)
 - **Samples:** 60 unrelated individuals
 - **Variables:** 100 most variables probes/genes
 
+R commands:
+
 ```R
 # Load library
 library(BDgraph)
@@ -49,6 +51,33 @@ mytX <- t(scale(geneExpression))
 res <- ShrinkNet(tX=mytX)
 ```
 
+Output:
+
+```
+STEP 0: SVD computations... DONE
+STEP 1: Variational algorithm...
+iteration 1
+iteration 2
+iteration 3
+iteration 4
+iteration 5
+iteration 6
+iteration 7
+iteration 8
+iteration 9
+iteration 10
+...
+iteration 74
+DONE
+STEP 2: Calculate summary statistics from posteriors... DONE
+STEP 3: Estimate p0... DONE
+STEP 4: Edge selection... DONE
+
+prior null probability p0 = 0.70242 
+73 selected edges out of 4950 (1.47%) using blfdr = 0.1
+
+Time (H:MM:SS): 0:00:16
+```
 
 ## References
 
