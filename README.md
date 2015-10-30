@@ -15,14 +15,14 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 If you wish to install the package from R:
 
-* Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+1. Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 
 ```R
 install.packages("devtools")
 library(devtools)
 ```
 
-* Install and load **ShrinkNet**:
+2. Install and load **ShrinkNet**:
 
 ```R
 install_github("gleday/ShrinkNet")
@@ -61,11 +61,6 @@ iteration 2
 iteration 3
 iteration 4
 iteration 5
-iteration 6
-iteration 7
-iteration 8
-iteration 9
-iteration 10
 ...
 iteration 74
 DONE

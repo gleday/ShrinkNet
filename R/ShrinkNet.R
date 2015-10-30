@@ -1,6 +1,6 @@
 #' Gene network reconstruction using global-local shrinkage priors
 #'
-#' @param tX p by n data matrix of scaled gene expression measurements
+#' @param tX p by n data matrix of gene expression measurements (centered and scaled)
 #' @param globalShrink integer. Either 1 or 2. See Details.
 #' @param methodp0 character. Either "exact" or "sampling". See Details.
 #' @param nsamp integer. Number of randomly selected edges to estimate p0. Only when methodp0="sampling". See Details.
