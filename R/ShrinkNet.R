@@ -10,7 +10,11 @@
 #' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
 #' @param verbose logical. Should information on progress be printed?
 #' @details
+<<<<<<< HEAD
 #' The function enables the reconstruction an undirected network given data. 
+=======
+#' The function enables the reconstruction of an undirected network given data. 
+>>>>>>> 1e661989d45a6a528a695a52841e919e34f8c7a5
 #' Although the tool was primarily developed to analyse mRNA expression data,
 #' the method is general and can be applied to any data set for which it is reasonable to
 #' assume a multivariate Gaussian model. This typically include molecular data generated from

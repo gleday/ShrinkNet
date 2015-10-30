@@ -38,7 +38,11 @@ BEGIN_RCPP
 END_RCPP
 }
 // HiddenEstimatep0
+<<<<<<< HEAD
 Rcpp::List HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
+=======
+double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
+>>>>>>> 1e661989d45a6a528a695a52841e919e34f8c7a5
 RcppExport SEXP ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -63,9 +67,9 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// HiddenVarRidgeiOneIter
-Rcpp::List HiddenVarRidgeiOneIter(int ii, Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit, bool light);
-RcppExport SEXP ShrinkNet_HiddenVarRidgeiOneIter(SEXP iiSEXP, SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP, SEXP lightSEXP) {
+// HiddenVarRidgeiGetKappa
+arma::colvec HiddenVarRidgeiGetKappa(int ii, Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit);
+RcppExport SEXP ShrinkNet_HiddenVarRidgeiGetKappa(SEXP iiSEXP, SEXP SVDsSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -75,8 +79,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type bRand(bRandSEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type bRandStarInit(bRandStarInitSEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type dSigmaStarInit(dSigmaStarInitSEXP);
-    Rcpp::traits::input_parameter< bool >::type light(lightSEXP);
-    __result = Rcpp::wrap(HiddenVarRidgeiOneIter(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit, light));
+    __result = Rcpp::wrap(HiddenVarRidgeiGetKappa(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit));
     return __result;
 END_RCPP
 }
