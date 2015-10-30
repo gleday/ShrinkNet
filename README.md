@@ -29,11 +29,13 @@ install_github("gleday/ShrinkNet")
 library(ShrinkNet)
 ```
 
-## Examples
+## Example 1
 
 **Data:** gene expression data (B-lymphocyte cells) analysed by Mohammadi and Wit (2015) 
-**samples:** 60 unrelated individuals
-**variables:** 100 most variables probes/genes
+
+**Samples:** 60 unrelated individuals
+
+**Variables:** 100 most variables probes/genes
 
 ```R
 # Load library
