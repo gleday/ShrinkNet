@@ -174,12 +174,12 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
   ##### Edge selection using Bayesian local false discovery rate
   if(verbose) cat("STEP 4: Edge selection... ")
   selGraph <- HiddenEdgeSelection(themat=matThres, tX=tX, p0=p0, lfdrcut=blfdr)
+  nbedge <- sum(selGraph)/2
   if(verbose){
     cat("DONE\n\n")
-    cat("prior null probability p0 = ", round(p0,5), "\n")
+    cat("prior null probability p0 =", round(p0,5), "\n")
+    cat("", nbedge, " selected edges out of ", edgeTot, " (",round(100*nbedge/edgeTot, 2),"%)", " using blfdr = ", blfdr, sep="")
   }
-  nbedge <- sum(selGraph)/2
-  if(verbose) cat("", nbedge, " selected edges out of ", edgeTot, " (",round(100*nbedge/edgeTot, 2),"%)", "", sep="")
   tps2 <- proc.time() - tps
   if(verbose){
     cat("\n\n")

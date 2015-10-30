@@ -38,11 +38,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // HiddenEstimatep0
-<<<<<<< HEAD
-Rcpp::List HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
-=======
 double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
->>>>>>> 1e661989d45a6a528a695a52841e919e34f8c7a5
 RcppExport SEXP ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;

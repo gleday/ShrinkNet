@@ -7,9 +7,9 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 ## Description
 
-**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data. Although it was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this typically includes molecular data generated from a microarray technologies. Hence, the software can in principle be used to analyse protein expression data (e.g. as produced by reverse-phase protein arrays), microRNA and metabolomic data among others.
+**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data. Although it was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this typically includes molecular data generated from a microarray technologies. Hence, the software can in principle be used to analyse protein expression data (e.g. as produced by reverse-phase protein arrays), microRNA and metabolomic data (among others).
 
-**ShrinkNet** aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages and SVD decompositions are employed to speed up the variational algorithm. Furthermore, functions in the package has been designed so the most computationally intensive steps can be parallelized.
+**ShrinkNet** aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm. Furthermore, the package has been designed so the most computationally intensive steps can be parallelized.
 
 ## Installation
 
@@ -29,4 +29,26 @@ install_github("gleday/ShrinkNet")
 library(ShrinkNet)
 ```
 
+## Examples
+
+We analyze the gene expression data (B-lymphocyte cells) used by Mohammadi and Wit (2015)
+
+```R
+# Load library
+library(BDgraph)
+
+# Load the gene expression data
+data(geneExpression)
+
+# Center and scale the data
+mytX <- t(scale(geneExpression))
+
+# Run ShrinkNet
+res <- ShrinkNet(tX=mytX)
+```
+
+
+## References
+
+Mohammadi, A. and Wit, E. C. (2015). Bayesian structure learning in sparse Gaussian graphical models. *Bayesian Anal*. **10** 109-138.
 
