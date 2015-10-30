@@ -11,26 +11,16 @@ HiddenEdgeBFprime <- function(idx, themat, tX) {
 
 HiddenEstimatep0 <- function(themat, tX) {
     .Call('ShrinkNet_HiddenEstimatep0', PACKAGE = 'ShrinkNet', themat, tX)
-<<<<<<< HEAD
-}
-
-HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut) {
-    .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut)
-=======
->>>>>>> 1e661989d45a6a528a695a52841e919e34f8c7a5
 }
 
 HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut) {
     .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut)
 }
 
-<<<<<<< HEAD
-=======
 HiddenVarRidgeiGetKappa <- function(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit) {
     .Call('ShrinkNet_HiddenVarRidgeiGetKappa', PACKAGE = 'ShrinkNet', ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit)
 }
 
->>>>>>> 1e661989d45a6a528a695a52841e919e34f8c7a5
 HiddenVarAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose) {
     .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose)
 }
