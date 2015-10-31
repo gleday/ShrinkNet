@@ -71,6 +71,81 @@ prior null probability p0 = 0.70242
 Time (H:MM:SS): 0:00:16
 ```
 
+## Example 2
+
+- **Data:** Protein expression data from [TCPA](http://app1.bioinformatics.mdanderson.org/tcpa/_design/basic/index.html) - Ovarian serous cystadenocarcinoma (OV)
+- **Samples:** 412 tumor samples
+- **Variables:** 190 proteins
+
+R commands:
+
+```R
+# Read data
+tcpaOV <- read.table(file="TCGA-OV-L3-S35.csv", sep=",", header=TRUE)
+
+# Remove annotations
+datamatOV <- data.matrix(tcpaOV[,-c(1,2)])
+rownames(datamatOV) <- tcpaOV$TCGA_patient_barcode
+
+# Center and scale the data
+mytX <- t(scale(datamatOV, center = TRUE, scale = TRUE))
+
+# Run ShrinkNet
+res <- ShrinkNet(tX=mytX, methodp0="sampling", nsamp=1000, ncpus=8)
+```
+
+Output:
+
+```
+STEP 0: SVD computations... 
+R Version:  R version 3.1.1 (2014-07-10) 
+
+snowfall 1.84-6.1 initialized (using snow 0.3-13): parallel execution on 8 CPUs.
+
+Library ShrinkNet loaded.
+Library ShrinkNet loaded in cluster.
+
+
+Stopping cluster
+
+DONE
+STEP 1: Variational algorithm...
+iteration 1
+iteration 2
+iteration 3
+iteration 4
+iteration 5
+iteration 6
+iteration 7
+DONE
+STEP 2: Calculate summary statistics from posteriors... 
+snowfall 1.84-6.1 initialized (using snow 0.3-13): parallel execution on 8 CPUs.
+
+Library ShrinkNet loaded.
+Library ShrinkNet loaded in cluster.
+
+
+Stopping cluster
+
+DONE
+STEP 3: Estimate p0... 
+snowfall 1.84-6.1 initialized (using snow 0.3-13): parallel execution on 8 CPUs.
+
+Library ShrinkNet loaded.
+Library ShrinkNet loaded in cluster.
+
+
+Stopping cluster
+
+DONE
+STEP 4: Edge selection... DONE
+
+prior null probability p0 = 0.896 
+923 selected edges out of 17955 (5.14%) using blfdr = 0.1
+
+Time (H:MM:SS): 0:00:54
+```
+
 ## References
 
 Mohammadi, A. and Wit, E. C. (2015). Bayesian structure learning in sparse Gaussian graphical models. *Bayesian Anal*. **10** 109-138.
