@@ -9,6 +9,7 @@
 #' @param maxiter integer. Maximum number of iterations for the variational algorithm. Default is 100.
 #' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
 #' @param verbose logical. Should information on progress be printed?
+#' @param standardize logical. Should the data be standardized? Default is TRUE.
 #' @details
 #' The function enables the reconstruction of an undirected network given data. 
 #' Although the tool was primarily developed to analyse mRNA expression data,
@@ -30,18 +31,15 @@
 #' a random subset of size \code{nsamp} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
 #' \code{methodp0}="sampling" otherwise with \code{nsamp} being greater than 1000.
 #' 
-#' @return A named list with the following elements:
-#'  \item{adjacency}{A sparse matrix of class \code{\link[Matrix]{dsCMatrix-class}} containing the adjacency matrix corresponding to the selected graph.}
-#'  \item{p0}{A number giving the estimate of the proportion of null hypothesis.}
-#'  \item{kappabar}{A matrix containing scores used to rank edges.}
-#'  \item{globalPrior}{A matrix containing the (shape and rate) parameters of the global shrinkage prior
-#'  (gamma distribution) at each iteration of the variational algorithm.}
-#'  \item{allmargs}{A matrix containing the values of the variational lower bounds for each regression
-#'  equation in the Bayesian SEM at each iteration of the variational algorithm.}
-#'  \item{time}{Running time of ShrinkNet.}
+#' @return An object of class \code{\link{ShrinkNet-class}}
+#' 
 #' @author Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
+#' 
+#' @references Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
+#' van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
+#' 
 #' @export
-ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1, blfdr=0.1, maxiter=100, tol=0.001, verbose=TRUE){
+ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1, blfdr=0.1, maxiter=100, tol=0.001, verbose=TRUE, standardize=TRUE){
 
   ##### Input checks
   if(is.matrix(tX)){
@@ -73,7 +71,7 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
       nsamp <- edgeTot
     }
     if(nsamp<1000){
-      warnings("We strongly encourage taking nsamp >= 1000 to obtain a reasonable estimate of p0")
+      warning("nsamp (<1000) may be too low to obtain a reasonable estimate of p0")
     }
   }else{
     stop("nsamp is not a numeric")
@@ -95,7 +93,7 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
     if(ncpus>1){
       if(max(dim(tX))<100){
         ncpus <- 1
-        warnings("max(n,p)<100: No parallel computations")
+        warning("max(n,p)<100: no parallel computations")
       }
     }
   }else{
@@ -103,6 +101,15 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
   }
   if(!is.logical(verbose)){
     stop("verbose is not a logical")
+  }
+  if(!is.logical(standardize)){
+    stop("standardize is not a logical")
+  }else{
+    if(standardize){
+      tX <- t(scale(t(tX), center = TRUE, scale = TRUE))
+    }else{
+      warning("Input data have not been standardized")
+    }
   }
   
   tps <- proc.time()
@@ -188,12 +195,17 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
   }
   
   ## Output
-  out <- list(
-    "adjacency" = Matrix::Matrix(selGraph, sparse=TRUE),
-    "p0"= p0,
-    "kappabar" = matThres,
-    "globalPrior" = eb$parTau,
-    "allmargs" = eb$allmargs,
-    "time" = tps2)
+  myigraph <- igraph::graph.adjacency(selGraph, mode = "undirected")
+  if(!is.null(rownames(tX))){
+    myigraph <- igraph::set.vertex.attribute(myigraph, "name", value=rownames(tX))
+  }
+  out <- new("ShrinkNet",
+             graph = myigraph,
+             kappa = matThres,
+             p0 = p0,
+             globalPrior = eb$parTau,
+             allmargs = eb$allmargs,
+             time = tps2[3])
+  
   return(out)
 }

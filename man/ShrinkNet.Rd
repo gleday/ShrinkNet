@@ -5,10 +5,11 @@
 \title{Gene network reconstruction using global-local shrinkage priors}
 \usage{
 ShrinkNet(tX, globalShrink = 1, methodp0 = "exact", nsamp = 1000,
-  ncpus = 1, blfdr = 0.1, maxiter = 100, tol = 0.001, verbose = TRUE)
+  ncpus = 1, blfdr = 0.1, maxiter = 100, tol = 0.001, verbose = TRUE,
+  standardize = TRUE)
 }
 \arguments{
-\item{tX}{p by n data matrix of scaled gene expression measurements}
+\item{tX}{p by n data matrix of gene expression measurements (centered and scaled)}
 
 \item{globalShrink}{integer. Either 1 or 2. See Details.}
 
@@ -25,17 +26,11 @@ ShrinkNet(tX, globalShrink = 1, methodp0 = "exact", nsamp = 1000,
 \item{tol}{numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.}
 
 \item{verbose}{logical. Should information on progress be printed?}
+
+\item{standardize}{logical. Should the data be standardized? Default is TRUE.}
 }
 \value{
-A named list with the following elements:
- \item{adjacency}{A sparse matrix of class \code{\link[Matrix]{dsCMatrix-class}} containing the adjacency matrix corresponding to the selected graph.}
- \item{p0}{A number giving the estimate of the proportion of null hypothesis.}
- \item{kappabar}{A matrix containing scores used to rank edges.}
- \item{globalPrior}{A matrix containing the (shape and rate) parameters of the global shrinkage prior
- (gamma distribution) at each iteration of the variational algorithm.}
- \item{allmargs}{A matrix containing the values of the variational lower bounds for each regression
- equation in the Bayesian SEM at each iteration of the variational algorithm.}
- \item{time}{Running time of ShrinkNet.}
+An object of class \code{\link{ShrinkNet-class}}
 }
 \description{
 Gene network reconstruction using global-local shrinkage priors
@@ -63,5 +58,9 @@ a random subset of size \code{nsamp} is selected to estimate p0. When p<=100 we 
 }
 \author{
 Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
+}
+\references{
+Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
+van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 }
 

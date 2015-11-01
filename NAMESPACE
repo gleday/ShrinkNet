@@ -1,5 +1,18 @@
 useDynLib(ShrinkNet)
 exportPattern("^[^\\Hidden]")
 importFrom(Rcpp, evalCpp)
+importFrom(methods, setMethod, setClass)
+importFrom(igraph, graph.adjacency)
 importFrom(snowfall, sfInit, sfExport, sfSapply, sfStop, sfLibrary, sfRemoveAll)
 export(ShrinkNet, getSVD)
+exportClasses("ShrinkNet")
+exportMethods(
+  "adjacency",
+  "plotGraph",
+  "plotML",
+  "plotPrior",
+  "print",
+  "score",
+  "show",
+  "summary"
+)
