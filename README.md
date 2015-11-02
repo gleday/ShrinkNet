@@ -104,7 +104,54 @@ prior null probability p0 = 0.70242
 Time (H:MM:SS): 0:00:16
 ```
 
+
+
 ## Example 2
+
+- **Data:** gene expression data from R package [GeneNet](https://cran.r-project.org/web/packages/GeneNet/index.html)
+- **Time points:** 9
+- **Variables:** 102 genes
+
+R commands:
+
+```R
+# Load library
+library(GeneNet)
+
+# Load the gene expression data
+data(ecoli)
+
+# Run ShrinkNet
+res <- ShrinkNet(tX=t(ecoli))
+```
+
+R console:
+
+```
+STEP 0: SVD computations... DONE
+STEP 1: Variational algorithm...
+iteration 1
+iteration 2
+iteration 3
+iteration 4
+iteration 5
+iteration 6
+iteration 7
+iteration 8
+iteration 9
+DONE
+STEP 2: Calculate summary statistics from posteriors... DONE
+STEP 3: Estimate p0... DONE
+STEP 4: Edge selection... DONE
+
+prior null probability p0 = 0.72996 
+89 selected edges out of 5151 (1.73%) using blfdr = 0.1
+
+Time (H:MM:SS): 0:00:02
+```
+
+
+## Example 3
 
 - **Data:** Protein expression data from [TCPA](http://app1.bioinformatics.mdanderson.org/tcpa/_design/basic/index.html) - Ovarian serous cystadenocarcinoma (OV)
 - **Samples:** 412 tumor samples
