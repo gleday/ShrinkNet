@@ -13,6 +13,36 @@ ShrinkNet aims to be computationally efficient. Core functions are implemented i
 
 ## Usage
 
+Given a gene expression data matrix (where rows represent genes and columns represent samples) stored in *mydata*, ShrinkNet is run by the following R command:
+```R
+myobject <- ShrinkNet(tX=mydata)
+```
+
+The R function ShrinkNet() returns an (S4) object of class "ShrinkNet" that is associated with the following convenience functions:
+
+```R
+# Print object information
+print(myobject)
+
+# Summary on inferred network
+summary(myobject)
+
+# Extract adjacency matrix corresponding to the inferred network
+adjacency(myobject)
+
+# Extract matrix containing scores on edges (and used to rank them)
+score(myobject)
+
+# Plot convergence of the variational algorithm
+plotML(myobject)
+
+# Plot density of the global shrinkage prior
+plotPrior(myobject)
+
+# Plot the inferred graph (further arguments to be passed to [plot.igragh](http://igraph.org/r/doc/plot.common.html))
+plotGraph(myobject)
+
+```
 
 
 ## Installation
