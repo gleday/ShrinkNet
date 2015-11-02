@@ -33,13 +33,13 @@ adjacency(myobject)
 # Extract matrix containing scores on edges (and used to rank them)
 score(myobject)
 
-# Plot convergence of the variational algorithm
+# Plot convergence of the variational algorithm (further arguments to be passed to plot())
 plotML(myobject)
 
-# Plot density of the global shrinkage prior
+# Plot density of the global shrinkage prior (further arguments to be passed to plot())
 plotPrior(myobject)
 
-# Plot the inferred graph (further arguments to be passed to [plot.igragh](http://igraph.org/r/doc/plot.common.html))
+# Plot the inferred graph (further arguments to be passed to plot.igragh())
 plotGraph(myobject)
 
 ```
