@@ -14,5 +14,6 @@ exportMethods(
   "print",
   "score",
   "show",
-  "summary"
+  "summary",
+  "topEdges"
 )

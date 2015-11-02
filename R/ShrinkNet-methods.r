@@ -34,9 +34,9 @@ setMethod(
     edgeTot <- 0.5*nrow(object@kappa)*(nrow(object@kappa)-1)
     cat("Class \"ShrinkNet\"\n\n")
     cat("UNDIRECTED GRAPH\n")
-    cat("nodes:", vcount(object@graph), "\n")
-    cat("edges:", ecount(object@graph), "\n")
-    cat("density:", graph.density(object@graph), "\n\n")
+    cat("nodes:", igraph::vcount(object@graph), "\n")
+    cat("edges:", igraph::ecount(object@graph), "\n")
+    cat("density:", igraph::graph.density(object@graph), "\n\n")
     
     cat("Summary node degree:\n")
     print(summary(igraph::degree(object@graph)))
@@ -49,7 +49,7 @@ setMethod(
   f = "adjacency",
   signature = "ShrinkNet",
   definition = function(object){
-    get.adjacency(object@graph)
+    igraph::get.adjacency(object@graph)
   }
 )
 
@@ -98,5 +98,22 @@ setMethod(
   signature = "ShrinkNet",
   definition = function(object, ...){
     plot(object@graph, ...)
+  }
+)
+
+#' @rdname ShrinkNet-class
+#' @aliases topEdges
+#' @param nb maximum number of edges to return, Default is 20.
+setMethod(
+  f = "topEdges",
+  signature = "ShrinkNet",
+  definition = function(object, nb=20){
+    mat <- score(object)
+    mat[upper.tri(mat, diag=TRUE)] <- NA
+    out <- which(!is.na(mat), arr.ind = TRUE)
+    out <- cbind(out, mat[lower.tri(mat, diag=FALSE)])
+    out <- out[order(out[,3], decreasing = TRUE),]
+    colnames(out) <- c("i", "j", "score")
+    out[1:nb,]
   }
 )

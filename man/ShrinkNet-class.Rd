@@ -19,6 +19,8 @@
 \alias{show,ShrinkNet-method}
 \alias{summary}
 \alias{summary,ShrinkNet-method}
+\alias{topEdges}
+\alias{topEdges,ShrinkNet-method}
 \title{Class ShrinkNet}
 \usage{
 \S4method{print}{ShrinkNet}(x, ...)
@@ -36,6 +38,8 @@
 \S4method{plotPrior}{ShrinkNet}(object, ...)
 
 \S4method{plotGraph}{ShrinkNet}(object, ...)
+
+\S4method{topEdges}{ShrinkNet}(object, nb = 20)
 }
 \arguments{
 \item{x}{An object of class \code{ShrinkNet-class}}
@@ -43,6 +47,8 @@
 \item{...}{further arguments passed to or from other methods.}
 
 \item{object}{An object of class \code{ShrinkNet-class}}
+
+\item{nb}{maximum number of edges to return, Default is 20.}
 }
 \description{
 An S4 class representing the output of the \code{\link{ShrinkNet}} function.
