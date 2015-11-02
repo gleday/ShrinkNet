@@ -11,6 +11,23 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm. Furthermore, the package has been designed so the most computationally intensive steps can be parallelized.
 
+
+## Installation
+
+If you wish to install the package from R:
+
+1) Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
+```R
+install.packages("devtools")
+library(devtools)
+```
+2) Install and load **ShrinkNet**:
+```R
+install_github("gleday/ShrinkNet")
+library(ShrinkNet)
+```
+
+
 ## Usage
 
 Given a gene expression data matrix (where rows represent genes and columns represent samples) stored in *mydata*, ShrinkNet is run by the following R command:
@@ -44,21 +61,6 @@ plotGraph(myobject)
 
 ```
 
-
-## Installation
-
-If you wish to install the package from R:
-
-1) Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
-```R
-install.packages("devtools")
-library(devtools)
-```
-2) Install and load **ShrinkNet**:
-```R
-install_github("gleday/ShrinkNet")
-library(ShrinkNet)
-```
 
 ## Example 1
 
