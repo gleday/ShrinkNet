@@ -81,7 +81,7 @@ data(geneExpression)
 res <- ShrinkNet(tX=t(geneExpression))
 ```
 
-Output:
+R console:
 
 ```
 STEP 0: SVD computations... DONE
@@ -124,7 +124,7 @@ rownames(datamatOV) <- tcpaOV$TCGA_patient_barcode
 res <- ShrinkNet(tX=t(datamatOV), methodp0="sampling", nsamp=1000, ncpus=8)
 ```
 
-Output:
+R console:
 
 ```
 STEP 0: SVD computations... 
