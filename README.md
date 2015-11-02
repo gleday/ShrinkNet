@@ -7,9 +7,9 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 ## Description
 
-**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data. Although it was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this typically includes molecular data generated from a microarray technologies. Hence, the software can in principle be used to analyse protein expression data (e.g. as produced by reverse-phase protein arrays), microRNA and metabolomic data (among others).
+**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data. Although it was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this typically includes molecular data generated from a microarray technologies. Hence, the software can be used to analyse protein, microRNA and metabolomic data (among others).
 
-**ShrinkNet** aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm. Furthermore, the package has been designed so the most computationally intensive steps can be parallelized.
+ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm. Furthermore, the package has been designed so the most computationally intensive steps can be parallelized.
 
 ## Installation
 
@@ -72,7 +72,7 @@ Time (H:MM:SS): 0:00:16
 
 - **Data:** Protein expression data from [TCPA](http://app1.bioinformatics.mdanderson.org/tcpa/_design/basic/index.html) - Ovarian serous cystadenocarcinoma (OV)
 - **Samples:** 412 tumor samples
-- **Variables:** 190 proteins
+- **Variables:** 190 proteins (as measured by reverse-phase protein arrays)
 
 R commands:
 
