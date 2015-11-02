@@ -59,6 +59,8 @@ plotPrior(myobject)
 # Plot the inferred graph (further arguments to be passed to plot.igragh())
 plotGraph(myobject)
 
+# Extract a table of the top-ranked edges
+topEdges(myobject)
 ```
 
 
