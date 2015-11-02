@@ -41,11 +41,8 @@ library(BDgraph)
 # Load the gene expression data
 data(geneExpression)
 
-# Center and scale the data
-mytX <- t(scale(geneExpression))
-
 # Run ShrinkNet
-res <- ShrinkNet(tX=mytX)
+res <- ShrinkNet(tX=t(geneExpression))
 ```
 
 Output:
@@ -87,11 +84,8 @@ tcpaOV <- read.table(file="TCGA-OV-L3-S35.csv", sep=",", header=TRUE)
 datamatOV <- data.matrix(tcpaOV[,-c(1,2)])
 rownames(datamatOV) <- tcpaOV$TCGA_patient_barcode
 
-# Center and scale the data
-mytX <- t(scale(datamatOV, center = TRUE, scale = TRUE))
-
 # Run ShrinkNet
-res <- ShrinkNet(tX=mytX, methodp0="sampling", nsamp=1000, ncpus=8)
+res <- ShrinkNet(tX=t(datamatOV), methodp0="sampling", nsamp=1000, ncpus=8)
 ```
 
 Output:
