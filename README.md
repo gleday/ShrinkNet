@@ -7,7 +7,7 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 ## Description
 
-**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data characterizing the conditional independence structure between the molecular variables.
+**ShrinkNet** enables the reconstruction of an undirected network from high-throughput molecular data that characterizes the conditional independence structure between the molecular variables.
 
 Although ShrinkNet was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this may include protein ([Abkani et al., 2014](http://dx.doi.org/10.1038/ncomms4887)), microRNA ([Stingo et al., 2010](http://projecteuclid.org/euclid.aoas/1294167808)) and metabolomic data ([Krumsiek et al., 2011](http://www.biomedcentral.com/1752-0509/5/21)) for example.
 
