@@ -127,12 +127,16 @@ setMethod(
   f = "topEdges",
   signature = "ShrinkNet",
   definition = function(object, nb=20){
-    mat <- score(object)
-    mat[upper.tri(mat, diag=TRUE)] <- NA
-    out <- which(!is.na(mat), arr.ind = TRUE)
-    out <- cbind(out, mat[lower.tri(mat, diag=FALSE)])
-    out <- out[order(out[,3], decreasing = TRUE),]
-    colnames(out) <- c("i", "j", "score")
-    out[1:nb,]
+    themat <- score(object)
+    themat[lower.tri(themat, diag=TRUE)] <- NA
+    indx <- which(!is.na(themat), arr.ind = TRUE)
+    myscores <- apply(indx, 1, function(x){object@kappa[x[1],x[2]]})
+    labs <- igraph::get.vertex.attribute(object@graph, "name")
+    nodes <- t(apply(indx, 1, function(x){c(labs[x[1]], labs[x[2]])}))
+    mat <- data.frame(nodes, indx, myscores, stringsAsFactors=FALSE)
+    colnames(mat) <- c("node1","node2","index1","index2","score")
+    mat <- mat[order(mat$score, decreasing=TRUE),]
+    rownames(mat) <- NULL
+    mat[1:nb,]
   }
 )
