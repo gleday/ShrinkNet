@@ -8,6 +8,7 @@ export(ShrinkNet, getSVD)
 exportClasses("ShrinkNet")
 exportMethods(
   "adjacency",
+  "listEdges",
   "plotGraph",
   "plotML",
   "plotPrior",

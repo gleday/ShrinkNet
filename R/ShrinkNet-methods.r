@@ -102,6 +102,25 @@ setMethod(
 )
 
 #' @rdname ShrinkNet-class
+#' @aliases listEdges
+setMethod(
+  f = "listEdges",
+  signature = "ShrinkNet",
+  definition = function(object){
+    mat <- igraph::as_edgelist(object@graph, names = TRUE)
+    mat <- as.data.frame(mat, stringsAsFactors=FALSE)
+    labs <- igraph::get.vertex.attribute(object@graph, "name")
+    indx <- t(apply(mat, 1, function(x){c(which(labs==x[1]), which(labs==x[2]))}))
+    mat <- cbind(mat, indx)
+    colnames(mat) <- c("node1","node2","index1","index2")
+    mat$score <- apply(indx, 1, function(x){object@kappa[x[1],x[2]]})
+    mat <- mat[order(mat$score, decreasing=TRUE),]
+    rownames(mat) <- NULL
+    mat
+  }
+)
+
+#' @rdname ShrinkNet-class
 #' @aliases topEdges
 #' @param nb maximum number of edges to return, Default is 20.
 setMethod(

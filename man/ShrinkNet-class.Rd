@@ -5,6 +5,8 @@
 \alias{ShrinkNet-class}
 \alias{adjacency}
 \alias{adjacency,ShrinkNet-method}
+\alias{listEdges}
+\alias{listEdges,ShrinkNet-method}
 \alias{plotGraph}
 \alias{plotGraph,ShrinkNet-method}
 \alias{plotML}
@@ -38,6 +40,8 @@
 \S4method{plotPrior}{ShrinkNet}(object, ...)
 
 \S4method{plotGraph}{ShrinkNet}(object, ...)
+
+\S4method{listEdges}{ShrinkNet}(object)
 
 \S4method{topEdges}{ShrinkNet}(object, nb = 20)
 }
