@@ -107,7 +107,7 @@ setMethod(
   f = "listEdges",
   signature = "ShrinkNet",
   definition = function(object){
-    mat <- igraph::as_edgelist(object@graph, names = TRUE)
+    mat <- igraph::get.edgelist(object@graph, names = TRUE)
     mat <- as.data.frame(mat, stringsAsFactors=FALSE)
     labs <- igraph::get.vertex.attribute(object@graph, "name")
     indx <- t(apply(mat, 1, function(x){c(which(labs==x[1]), which(labs==x[2]))}))
