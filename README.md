@@ -27,6 +27,7 @@ install_github("gleday/ShrinkNet")
 library(ShrinkNet)
 ```
 
+**Remark:** For Mac OS X, it may be necessary to install a recent GNU Fortran compiler beforehand. See [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/) for some explanations.
 
 ## Usage
 
