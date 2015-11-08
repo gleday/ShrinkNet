@@ -61,9 +61,9 @@ ShrinkNet <- function(tX, globalShrink=1, methodp0="exact", nsamp=1000, ncpus=1,
     if(!methodp0%in%c("exact","sampling")){
       stop("methodp0 should be equal to 'exact' or 'sampling'.")
     }
-    if(methodp0=="exact" & nrow(tX)>100){
+    if(methodp0=="exact" & nrow(tX)>min(dim(tX))){
       methodp0 <- "sampling"
-      warning("p>100 so methodp0 has been changed to 'sampling'")
+      warning("min(n,p)>100 so methodp0 has been changed to 'sampling'")
     }
   }else{
     stop("methodp0 is not a character")
