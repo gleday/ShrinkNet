@@ -19,6 +19,7 @@ ShrinkNet aims to be computationally efficient. Core functions are implemented i
 If you wish to install **ShrinkNet** from R (using package [devtools](https://cran.r-project.org/web/packages/devtools/index.html)):
 
 ```R
+install.packages("devtools")
 library(devtools)
 install_github("gleday/ShrinkNet")
 library(ShrinkNet)
