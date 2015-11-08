@@ -38,7 +38,7 @@ Given a gene expression data matrix (where rows represent genes and columns repr
 myobject <- ShrinkNet(tX=mydata)
 ```
 
-The R function ShrinkNet() returns an (S4) object of class "ShrinkNet" that is associated with the following convenience functions:
+The R function ShrinkNet() returns an (S4) object of class "ShrinkNet" that is associated with the following functions:
 
 ```R
 # Print object information
@@ -53,13 +53,13 @@ adjacency(myobject)
 # Extract matrix containing scores on edges (and used to rank them)
 score(myobject)
 
-# Plot convergence of the variational algorithm (further arguments to be passed to plot())
+# Plot convergence of the variational algorithm
 plotML(myobject)
 
-# Plot density of the global shrinkage prior (further arguments to be passed to plot())
+# Plot density of the global shrinkage prior
 plotPrior(myobject)
 
-# Plot the inferred graph (further arguments to be passed to plot.igragh())
+# Plot the inferred graph
 plotGraph(myobject)
 
 # Extract a table of the selected edges
@@ -168,7 +168,7 @@ Time (H:MM:SS): 0:00:02
 R commands:
 
 ```R
-# Read data
+# Read data (we assume the file 'TCGA-OV-L3-S35.csv' has been previously downloaded)
 tcpaOV <- read.table(file="TCGA-OV-L3-S35.csv", sep=",", header=TRUE)
 
 # Remove annotations
