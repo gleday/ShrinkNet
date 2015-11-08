@@ -350,11 +350,11 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
       mybool = false;
     }else{
       // Stop if no edges have been included over the last 1000 edges that have been investigated
-      if(ctstop>=1000){
-        mybool = false;
-      }else{
+      //if(ctstop>=10000){
+      //  mybool = false;
+      //}else{
         cpt++;
-      }
+      //}
     }
   }
   
