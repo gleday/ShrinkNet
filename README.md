@@ -16,15 +16,10 @@ ShrinkNet aims to be computationally efficient. Core functions are implemented i
 
 ## Installation
 
-If you wish to install the package from R:
+If you wish to install **ShrinkNet** from R (using package [devtools](https://cran.r-project.org/web/packages/devtools/index.html)):
 
-1) Install and load the R package [devtools](https://cran.r-project.org/web/packages/devtools/index.html):
 ```R
-install.packages("devtools")
 library(devtools)
-```
-2) Install and load **ShrinkNet**:
-```R
 install_github("gleday/ShrinkNet")
 library(ShrinkNet)
 ```
@@ -107,14 +102,85 @@ STEP 3: Estimate p0... DONE
 STEP 4: Edge selection... DONE
 
 prior null probability p0 = 0.70242 
-73 selected edges out of 4950 (1.47%) using blfdr = 0.1
+78 selected edges out of 4950 (1.58%) using blfdr = 0.1
 
-Time (H:MM:SS): 0:00:16
+Time (H:MM:SS): 0:00:17
+```
+
+## Example 2
+
+- **Data:** gene expression data from R package [care](https://cran.r-project.org/web/packages/care/index.html)
+- **Samples:** 30 human brain samples
+- **Variables:** 403 genes
+
+R commands:
+
+```R
+# Load library
+library(care)
+
+# Load the gene expression data
+data(lu2004)
+
+# Run ShrinkNet
+res <- ShrinkNet(tX=t(lu2004$x), methodp0="sampling", nsamp=10000, ncpus=8)
+```
+
+R console:
+
+```
+STEP 0: SVD computations... 
+snowfall 1.84-6.1 initialized (using snow 0.4-1): parallel execution on 8 CPUs.
+
+Library ShrinkNet loaded.
+Library ShrinkNet loaded in cluster.
+
+
+Stopping cluster
+
+DONE
+STEP 1: Variational algorithm...
+iteration 1
+iteration 2
+iteration 3
+iteration 4
+iteration 5
+iteration 6
+iteration 7
+iteration 8
+iteration 9
+iteration 10
+DONE
+STEP 2: Calculate summary statistics from posteriors... 
+snowfall 1.84-6.1 initialized (using snow 0.4-1): parallel execution on 8 CPUs.
+
+Library ShrinkNet loaded.
+Library ShrinkNet loaded in cluster.
+
+
+Stopping cluster
+
+DONE
+STEP 3: Estimate p0... 
+snowfall 1.84-6.1 initialized (using snow 0.4-1): parallel execution on 8 CPUs.
+
+Library ShrinkNet loaded.
+Library ShrinkNet loaded in cluster.
+
+
+Stopping cluster
+
+DONE
+STEP 4: Edge selection... DONE
+
+prior null probability p0 = 0.75675 
+917 selected edges out of 81003 (1.13%) using blfdr = 0.1
+
+Time (H:MM:SS): 0:00:43
 ```
 
 
-
-## Example 2
+## Example 3
 
 - **Data:** gene expression data from R package [GeneNet](https://cran.r-project.org/web/packages/GeneNet/index.html)
 - **Time points:** 9
@@ -153,13 +219,13 @@ STEP 3: Estimate p0... DONE
 STEP 4: Edge selection... DONE
 
 prior null probability p0 = 0.72996 
-89 selected edges out of 5151 (1.73%) using blfdr = 0.1
+94 selected edges out of 5151 (1.82%) using blfdr = 0.1
 
 Time (H:MM:SS): 0:00:02
 ```
 
 
-## Example 3
+## Example 4
 
 - **Data:** Protein expression data from [TCPA](http://app1.bioinformatics.mdanderson.org/tcpa/_design/basic/index.html) - Ovarian serous cystadenocarcinoma (OV)
 - **Samples:** 412 tumor samples
