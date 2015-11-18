@@ -29,7 +29,7 @@ library(ShrinkNet)
 
 ## Usage
 
-Given a gene expression data matrix (where rows represent genes and columns represent samples) stored in *mydata*, ShrinkNet is run by the following R command:
+Given a data matrix *mydata* where rows represent molecular variables (e.g. genes) and columns represent samples, ShrinkNet is run by the following R command:
 ```R
 myobject <- ShrinkNet(tX=mydata)
 ```
