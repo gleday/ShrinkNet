@@ -4,20 +4,15 @@
 \alias{ShrinkNet}
 \title{Gene network reconstruction using global-local shrinkage priors}
 \usage{
-ShrinkNet(tX, globalShrink = 1, methodp0 = "exact", nsamp = 1000,
-  ncpus = 1, blfdr = 0.1, maxiter = 100, tol = 0.001, verbose = TRUE,
-  standardize = TRUE)
+ShrinkNet(tX, globalShrink = 1, nsamp0 = NULL, blfdr = 0.1,
+  maxiter = 100, tol = 0.001, verbose = TRUE, standardize = TRUE)
 }
 \arguments{
 \item{tX}{p by n data matrix of gene expression measurements (centered and scaled)}
 
 \item{globalShrink}{integer. Either 1 or 2. See Details.}
 
-\item{methodp0}{character. Either "exact" or "sampling". See Details.}
-
-\item{nsamp}{integer. Number of randomly selected edges to estimate p0. Only when methodp0="sampling". See Details.}
-
-\item{ncpus}{integer. Number of cpu cores to be used.}
+\item{nsamp0}{integer. Number of randomly selected edges to estimate p0. See Details.}
 
 \item{blfdr}{numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
 
@@ -36,25 +31,13 @@ An object of class \code{\link{ShrinkNet-class}}
 Gene network reconstruction using global-local shrinkage priors
 }
 \details{
-The function enables the reconstruction of an undirected network given data.
-Although the tool was primarily developed to analyse mRNA expression data,
-the method is general and can be applied to any data set for which it is reasonable to
-assume a multivariate Gaussian model. This typically include molecular data generated from
-a microarray-based technology such as protein expression data (e.g. as produced by reverse-phase protein arrays)
-and microRNA data.
-
-\code{ShrinkNet} aims to be computationally efficient. Core functions are implemented in C++ using
-the Rcpp and RcppArmadillo software packages and SVD decompositions are employed to speed up the
-variational algorithm. Furthermore, functions in the package has been designed so that the most
-computationally intensive steps can be parallelized.
-
 If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
 fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
 the approximate analytical solution of Leday et al (2015) is used.
 
-If \code{methodp0}="exact", all P=0.5*p*(p-1) edges are investigated whereas if \code{methodp0}="sampling"
-a random subset of size \code{nsamp} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
-\code{methodp0}="sampling" otherwise with \code{nsamp} being greater than 1000.
+If \code{nsamp0}=\code{NULL} (default), p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
+whereas if \code{nsamp0}=\code{NULL}a random subset of size \code{nsamp0} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
+\code{methodp0}="sampling" otherwise with \code{nsamp0} being greater than 1000.
 }
 \author{
 Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>

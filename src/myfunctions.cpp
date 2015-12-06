@@ -368,25 +368,24 @@ double myf(int myk, mat mm1, mat mm2){
   return out;
 }
 
-Rcpp::List HiddenVarRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit){
+Rcpp::List HiddenVarRidgeiOneIter(int ii,  Rcpp::List SVDs, arma::mat tX, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit){
   
   double cSigma = 0.001;
   double dSigma = 0.001;
   
   // Data
   Rcpp::List tplist = Rcpp::as<Rcpp::List>(SVDs[ii-1]);
-  colvec myy = Rcpp::as<colvec>(tplist["myy"]);
   mat myu = Rcpp::as<mat>(tplist["u"]);
   colvec myd = Rcpp::as<colvec>(tplist["d"]);
   mat myv = Rcpp::as<mat>(tplist["v"]);
-  mat FTF = Rcpp::as<mat>(tplist["FTF"]);
-  mat myX = Rcpp::as<mat>(tplist["myX"]);
-  mat myF = Rcpp::as<mat>(tplist["myF"]);
-  int then = myX.n_rows;
-  int thep = myX.n_cols;
+  mat FTF = diagmat(myd%myd);
+  mat myF = myu*diagmat(myd);
+  int then = myu.n_rows;
+  int thep = myv.n_rows;
+  colvec myy = trans(tX.row(ii-1));
   colvec vec0(thep);
   vec0.zeros();
-  vec0.subvec(0,myd.n_elem-1) = myd % myd;
+  vec0.subvec(0,myd.n_elem-1) = myd%myd;
   
   // Update posterior shape parameters
   double aRandStar = aRand + 0.5*thep;
@@ -450,22 +449,22 @@ Rcpp::List HiddenVarRidgeiOneIter(int ii,  Rcpp::List SVDs, double aRand, double
 }
 
 // [[Rcpp::export]]
-arma::colvec HiddenVarRidgeiGetKappa(int ii,  Rcpp::List SVDs, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit){
+arma::colvec HiddenVarRidgeiGetKappa(int ii,  Rcpp::List SVDs, arma::mat tX, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit){
   
   double cSigma = 0.001;
   double dSigma = 0.001;
   
   // Data
   Rcpp::List tplist = Rcpp::as<Rcpp::List>(SVDs[ii-1]);
-  colvec myy = Rcpp::as<colvec>(tplist["myy"]);
   mat myu = Rcpp::as<mat>(tplist["u"]);
   colvec myd = Rcpp::as<colvec>(tplist["d"]);
   mat myv = Rcpp::as<mat>(tplist["v"]);
-  mat FTF = Rcpp::as<mat>(tplist["FTF"]);
-  mat myX = Rcpp::as<mat>(tplist["myX"]);
-  mat myF = Rcpp::as<mat>(tplist["myF"]);
-  int then = myX.n_rows;
-  int thep = myX.n_cols;
+  mat FTF = diagmat(myd%myd);
+  int then = myu.n_rows;
+  int thep = myv.n_rows;
+  colvec myy = trans(tX.row(ii-1));
+  mat myX = trans(tX.rows(find(linspace(1,tX.n_rows, tX.n_rows)!=ii)));
+  mat myF = myu*diagmat(myd);
 
   // Update posterior shape parameters
   double aRandStar = aRand + 0.5*thep;
@@ -526,7 +525,7 @@ arma::colvec mydigamma(colvec vec){
 }
 
 // [[Rcpp::export]]
-Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxiter, int globalShrink, double tol, bool verbose){
+Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, arma::mat tX, double aRand, double bRand, int maxiter, int globalShrink, double tol, bool verbose){
   
   // Initialization
   mat allmargs(maxiter+1, SVDs.size());
@@ -570,7 +569,7 @@ Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, double aRand, double bRand, int maxite
     // Fit all models
     for(int j=0; j<SVDs.size(); j++){
       //Rcpp::Rcout << "j " << j+1 << std::endl;
-      tplist = Rcpp::as<Rcpp::List>(HiddenVarRidgeiOneIter(j+1, SVDs, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar));
+      tplist = Rcpp::as<Rcpp::List>(HiddenVarRidgeiOneIter(j+1, SVDs, tX, parTau(ct,0), parTau(ct,1), allbRandStar, alldSigmaStar));
       tpvals = Rcpp::as<colvec>(tplist["postRand"]);
       tpvals2 = Rcpp::as<colvec>(tplist["postSig"]);
       allaRandStar(j) = tpvals(0);
@@ -652,7 +651,7 @@ Rcpp::List getSVD(int ii,  Rcpp::NumericMatrix tX){
   int then = myX.n_rows;
   int thep = myX.n_cols;
   
-  // Fast SVD along the lines of the R function fast.svd() in package corpcor
+  // Fast SVD (along the lines of the R function fast.svd() in package corpcor)
   mat u;
   colvec d;
   mat v;
@@ -669,8 +668,8 @@ Rcpp::List getSVD(int ii,  Rcpp::NumericMatrix tX){
     v = myX.t()*u*diagmat(1/d);
   }
   
-  mat myF = u*diagmat(d);
-  mat FTF = myF.t() * myF;
+  //mat myF = u*diagmat(d);
+  //mat FTF = myF.t() * myF;
 
-  return Rcpp::List::create(Rcpp::Named("u") = u, Rcpp::Named("d") = d, Rcpp::Named("v") = v, Rcpp::Named("myF") = myF, Rcpp::Named("FTF") = FTF, Rcpp::Named("myy") = myy, Rcpp::Named("myX") = myX);
+  return Rcpp::List::create(Rcpp::Named("u") = u, Rcpp::Named("d") = d, Rcpp::Named("v") = v);
 }
