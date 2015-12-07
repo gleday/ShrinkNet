@@ -15,8 +15,8 @@
 #' the approximate analytical solution of Leday et al (2015) is used.
 #'
 #' If \code{nsamp0}=\code{NULL} (default), p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
-#' whereas if \code{nsamp0}=\code{NULL}a random subset of size \code{nsamp} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
-#' \code{methodp0}="sampling" otherwise with \code{nsamp} being greater than 1000.
+#' whereas if \code{nsamp0}=\code{NULL}a random subset of size \code{nsamp0} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
+#' \code{methodp0}="sampling" otherwise with \code{nsamp0} being greater than 1000.
 #' 
 #' @return An object of class \code{\link{ShrinkNet-class}}
 #' 
@@ -26,7 +26,7 @@
 #' van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 #' 
 #' @export
-ShrinkNet <- function(tX, globalShrink=1, nsamp0=1000, blfdr=0.1, maxiter=100, tol=0.001, verbose=TRUE, standardize=TRUE){
+ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxiter=100, tol=0.001, verbose=TRUE, standardize=TRUE){
 
   ##### Input checks
   if(is.matrix(tX)){
@@ -46,9 +46,9 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=1000, blfdr=0.1, maxiter=100, t
   }
   edgeTot <- 0.5*nrow(tX)*(nrow(tX)-1)
   if(is.null(nsamp0)){
-    if(min(dim(tX))>100){
+    if(nrow(tX)>100){
       nsamp0 <- 1000
-      warning("min(n,p)>100 so p0 is estimated by sampling nsamp0=1000 edges")
+      warning("p>100 so p0 is estimated by sampling nsamp0=1000 edges")
     }
   }else{
     if(is.numeric(nsamp0)){
@@ -120,7 +120,7 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=1000, blfdr=0.1, maxiter=100, t
     mat <- matThres
     mat[upper.tri(mat)] <- 0
     idx <- which(mat!=0, arr.ind=TRUE)
-    idx <- idx[sample(nrow(idx), nsamp),]
+    idx <- idx[sample(nrow(idx), nsamp0),]
     allLogBFs <- t(apply(idx, 1, .edgeBFprime, themat=matThres, tX=tX))
     p0 <- 1-mean(allLogBFs>0)
   }

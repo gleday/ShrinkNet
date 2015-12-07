@@ -9,9 +9,9 @@ Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van
 
 ShrinkNet enables the reconstruction of an undirected network from high-throughput molecular data that characterizes the *conditional independence* structure between the molecular variables.
 
-Although ShrinkNet was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data set for which it is reasonable to assume a multivariate Gaussian model. In genomics, this may include protein ([Abkani et al., 2014](http://dx.doi.org/10.1038/ncomms4887)), microRNA ([Stingo et al., 2010](http://projecteuclid.org/euclid.aoas/1294167808)) and metabolomic data ([Krumsiek et al., 2011](http://www.biomedcentral.com/1752-0509/5/21)) for example.
+Although ShrinkNet was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data for which it is reasonable to assume a multivariate Gaussian model. In genomics, this may include protein ([Abkani et al., 2014](http://dx.doi.org/10.1038/ncomms4887)), microRNA ([Stingo et al., 2010](http://projecteuclid.org/euclid.aoas/1294167808)) and metabolomic data ([Krumsiek et al., 2011](http://www.biomedcentral.com/1752-0509/5/21)) for example.
 
-ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm. Furthermore, the package has been designed so the most computationally intensive steps can be parallelized.
+ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm.
 
 
 ## Installation
@@ -124,22 +124,13 @@ library(care)
 data(lu2004)
 
 # Run ShrinkNet
-res <- ShrinkNet(tX=t(lu2004$x), methodp0="sampling", nsamp=10000, ncpus=8)
+res <- ShrinkNet(tX=t(lu2004$x), nsamp0=10000)
 ```
 
 R console:
 
 ```
-STEP 0: SVD computations... 
-snowfall 1.84-6.1 initialized (using snow 0.4-1): parallel execution on 8 CPUs.
-
-Library ShrinkNet loaded.
-Library ShrinkNet loaded in cluster.
-
-
-Stopping cluster
-
-DONE
+STEP 0: SVD computations... DONE
 STEP 1: Variational algorithm...
 iteration 1
 iteration 2
@@ -152,32 +143,14 @@ iteration 8
 iteration 9
 iteration 10
 DONE
-STEP 2: Calculate summary statistics from posteriors... 
-snowfall 1.84-6.1 initialized (using snow 0.4-1): parallel execution on 8 CPUs.
-
-Library ShrinkNet loaded.
-Library ShrinkNet loaded in cluster.
-
-
-Stopping cluster
-
-DONE
-STEP 3: Estimate p0... 
-snowfall 1.84-6.1 initialized (using snow 0.4-1): parallel execution on 8 CPUs.
-
-Library ShrinkNet loaded.
-Library ShrinkNet loaded in cluster.
-
-
-Stopping cluster
-
-DONE
+STEP 2: Calculate summary statistics from posteriors... DONE
+STEP 3: Estimate p0... DONE
 STEP 4: Edge selection... DONE
 
-prior null probability p0 = 0.75675 
-917 selected edges out of 81003 (1.13%) using blfdr = 0.1
+prior null probability p0 = 0.75775 
+916 selected edges out of 81003 (1.13%) using blfdr = 0.1
 
-Time (H:MM:SS): 0:00:43
+Time (H:MM:SS): 0:00:58
 ```
 
 
@@ -243,24 +216,13 @@ datamatOV <- data.matrix(tcpaOV[,-c(1,2)])
 rownames(datamatOV) <- tcpaOV$TCGA_patient_barcode
 
 # Run ShrinkNet
-res <- ShrinkNet(tX=t(datamatOV), methodp0="sampling", nsamp=1000, ncpus=8)
+res <- ShrinkNet(tX=t(datamatOV), nsamp0=10000)
 ```
 
 R console:
 
 ```
-STEP 0: SVD computations... 
-R Version:  R version 3.1.1 (2014-07-10) 
-
-snowfall 1.84-6.1 initialized (using snow 0.3-13): parallel execution on 8 CPUs.
-
-Library ShrinkNet loaded.
-Library ShrinkNet loaded in cluster.
-
-
-Stopping cluster
-
-DONE
+STEP 0: SVD computations... DONE
 STEP 1: Variational algorithm...
 iteration 1
 iteration 2
@@ -270,31 +232,13 @@ iteration 5
 iteration 6
 iteration 7
 DONE
-STEP 2: Calculate summary statistics from posteriors... 
-snowfall 1.84-6.1 initialized (using snow 0.3-13): parallel execution on 8 CPUs.
-
-Library ShrinkNet loaded.
-Library ShrinkNet loaded in cluster.
-
-
-Stopping cluster
-
-DONE
-STEP 3: Estimate p0... 
-snowfall 1.84-6.1 initialized (using snow 0.3-13): parallel execution on 8 CPUs.
-
-Library ShrinkNet loaded.
-Library ShrinkNet loaded in cluster.
-
-
-Stopping cluster
-
-DONE
+STEP 2: Calculate summary statistics from posteriors... DONE
+STEP 3: Estimate p0... DONE
 STEP 4: Edge selection... DONE
 
-prior null probability p0 = 0.896 
-923 selected edges out of 17955 (5.14%) using blfdr = 0.1
+prior null probability p0 = 0.8937 
+937 selected edges out of 17955 (5.22%) using blfdr = 0.1
 
-Time (H:MM:SS): 0:00:54
+Time (H:MM:SS): 0:12:48
 ```
 
