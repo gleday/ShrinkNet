@@ -3,7 +3,6 @@ exportPattern("^[^\\Hidden]")
 importFrom(Rcpp, evalCpp)
 importFrom(methods, setMethod, setClass)
 importFrom(igraph, graph.adjacency, vcount, ecount, graph.density, degree, get.adjacency, get.edgelist, get.vertex.attribute)
-importFrom(snowfall, sfInit, sfExport, sfSapply, sfStop, sfLibrary, sfRemoveAll)
 export(ShrinkNet, getSVD)
 exportClasses("ShrinkNet")
 exportMethods(

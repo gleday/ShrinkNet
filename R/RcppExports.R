@@ -17,12 +17,12 @@ HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut) {
     .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut)
 }
 
-HiddenVarRidgeiGetKappa <- function(ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit) {
-    .Call('ShrinkNet_HiddenVarRidgeiGetKappa', PACKAGE = 'ShrinkNet', ii, SVDs, aRand, bRand, bRandStarInit, dSigmaStarInit)
+HiddenVarRidgeiGetKappa <- function(ii, SVDs, tX, aRand, bRand, bRandStarInit, dSigmaStarInit) {
+    .Call('ShrinkNet_HiddenVarRidgeiGetKappa', PACKAGE = 'ShrinkNet', ii, SVDs, tX, aRand, bRand, bRandStarInit, dSigmaStarInit)
 }
 
-HiddenVarAlgo <- function(SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose) {
-    .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, aRand, bRand, maxiter, globalShrink, tol, verbose)
+HiddenVarAlgo <- function(SVDs, tX, aRand, bRand, maxiter, globalShrink, tol, verbose) {
+    .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, tX, aRand, bRand, maxiter, globalShrink, tol, verbose)
 }
 
 getSVD <- function(ii, tX) {
