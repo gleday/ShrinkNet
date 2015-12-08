@@ -15,5 +15,6 @@ exportMethods(
   "score",
   "show",
   "summary",
-  "topEdges"
+  "topEdges",
+  "topDegree"
 )
