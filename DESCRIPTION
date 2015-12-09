@@ -11,9 +11,11 @@ Imports:
     Rcpp (>= 0.11.4),
     methods,
     igraph
-Description: The present package implements a variational algorithm to fit a
-    Bayesian simultaneous-equation model with global and local shrinkage priors, as
-    well as a posterior thresholding procedure to infer the network structure.
+Description: The present package enables the reconstruction of an undirected network
+    that characterizes the conditional independence structure between variables.
+    It implements a fast variational algorithm to approximate the posterior distributions
+    in the Bayesian simultaneous-equation model with global and local shrinkage priors, as
+    well as a selection procedure to infer the network structure.
 LazyLoad: yes
 License: GPL (>=2.0)
 LazyData: TRUE
