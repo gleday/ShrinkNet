@@ -21,6 +21,8 @@
 \alias{show,ShrinkNet-method}
 \alias{summary}
 \alias{summary,ShrinkNet-method}
+\alias{topDegree}
+\alias{topDegree,ShrinkNet-method}
 \alias{topEdges}
 \alias{topEdges,ShrinkNet-method}
 \title{Class ShrinkNet}
@@ -44,6 +46,8 @@
 \S4method{listEdges}{ShrinkNet}(object)
 
 \S4method{topEdges}{ShrinkNet}(object, nb = 20)
+
+\S4method{topDegree}{ShrinkNet}(object, nb = 20)
 }
 \arguments{
 \item{x}{An object of class \code{ShrinkNet-class}}
@@ -52,7 +56,7 @@
 
 \item{object}{An object of class \code{ShrinkNet-class}}
 
-\item{nb}{maximum number of edges to return, Default is 20.}
+\item{nb}{maximum number of edges (or nodes, depending on the function it applies to) to return, Default is 20.}
 }
 \description{
 An S4 class representing the output of the \code{\link{ShrinkNet}} function.

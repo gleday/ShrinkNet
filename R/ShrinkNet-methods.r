@@ -122,7 +122,7 @@ setMethod(
 
 #' @rdname ShrinkNet-class
 #' @aliases topEdges
-#' @param nb maximum number of edges to return, Default is 20.
+#' @param nb maximum number of edges (or nodes, depending on the function it applies to) to return, Default is 20.
 setMethod(
   f = "topEdges",
   signature = "ShrinkNet",
@@ -140,3 +140,20 @@ setMethod(
     mat[1:nb,]
   }
 )
+
+#' @rdname ShrinkNet-class
+#' @aliases topDegree
+setMethod(
+  f = "topDegree",
+  signature = "ShrinkNet",
+  definition = function(object, nb=20){
+    vals <- igraph::degree(object@graph)
+    vals <- vals[order(vals, decreasing=TRUE)]
+    mat <- matrix(vals[1:nb])
+    rownames(mat) <- names(vals)[1:nb]
+    colnames(mat) <- "degree"
+    mat
+  }
+)
+
+
