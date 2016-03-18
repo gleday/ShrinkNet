@@ -63,6 +63,9 @@ listEdges(myobject)
 
 # Extract a table of the 'nb' top-ranked edges
 topEdges(myobject, nb=10)
+
+# Extract a table of the 'nb' top-ranked nodes
+topDegree(myobject, nb=10)
 ```
 
 
