@@ -14,9 +14,10 @@
 #' fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
 #' the approximate analytical solution of Leday et al (2015) is used.
 #'
-#' If \code{nsamp0}=\code{NULL} (default), p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
-#' whereas if \code{nsamp0}=\code{NULL}a random subset of size \code{nsamp0} is selected to estimate p0. When p<=100 we suggest using \code{methodp0}="exact" and
-#' \code{methodp0}="sampling" otherwise with \code{nsamp0} being greater than 1000.
+#' When \code{nsamp0}=\code{NULL}, the proportion of null hypotheses p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
+#' When P is very large, it may me preferable to approximate p0 instead using a random subset of edges.
+#' If \code{nsamp0} is an integer, then a random subset of size \code{nsamp0} is selected to estimate p0.
+#' The default is \code{nsamp0}=\code{NULL} when p<=100 and \code{nsamp0}=1000 otherwise.
 #' 
 #' @return An object of class \code{\link{ShrinkNet-class}}
 #' 
