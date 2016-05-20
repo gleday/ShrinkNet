@@ -107,12 +107,15 @@ setMethod(
   f = "listEdges",
   signature = "ShrinkNet",
   definition = function(object){
-    mat <- igraph::get.edgelist(object@graph, names = TRUE)
+    labs <- rownames(adjacency(object))
+    temp <- as.matrix(adjacency(object))
+    temp[lower.tri(temp)] <- 0
+    indx <- which(temp==1, arr.ind=TRUE)
+    mat <- t(apply(indx, 1, function(x){c(labs[x[1]], labs[x[2]])}))
     mat <- as.data.frame(mat, stringsAsFactors=FALSE)
-    labs <- igraph::get.vertex.attribute(object@graph, "name")
-    indx <- t(apply(mat, 1, function(x){c(which(labs==x[1]), which(labs==x[2]))}))
-    mat <- cbind(mat, indx)
-    colnames(mat) <- c("node1","node2","index1","index2")
+    colnames(mat) <- c("node1","node2")
+    mat$"index1" <- indx[,1]
+    mat$"index2" <- indx[,2]
     mat$score <- apply(indx, 1, function(x){object@kappa[x[1],x[2]]})
     mat <- mat[order(mat$score, decreasing=TRUE),]
     rownames(mat) <- NULL
@@ -127,17 +130,20 @@ setMethod(
   f = "topEdges",
   signature = "ShrinkNet",
   definition = function(object, nb=20){
-    themat <- score(object)
-    themat[lower.tri(themat, diag=TRUE)] <- NA
+    themat <- object@kappa
+    vals <- sort(unique(themat[upper.tri(themat, diag=FALSE)]), decreasing=TRUE)
+    themat[lower.tri(themat, diag=TRUE) | (themat<vals[nb])] <- NA
     indx <- which(!is.na(themat), arr.ind = TRUE)
-    myscores <- apply(indx, 1, function(x){object@kappa[x[1],x[2]]})
-    labs <- igraph::get.vertex.attribute(object@graph, "name")
+    myadj <- as.matrix(adjacency(object))
+    labs <- rownames(myadj)
+    myscores <- apply(indx, 1, function(x){themat[x[1],x[2]]})
     nodes <- t(apply(indx, 1, function(x){c(labs[x[1]], labs[x[2]])}))
-    mat <- data.frame(nodes, indx, myscores, stringsAsFactors=FALSE)
-    colnames(mat) <- c("node1","node2","index1","index2","score")
+    selected <- apply(indx, 1, function(x){myadj[x[1],x[2]]})
+    mat <- data.frame(nodes, indx, myscores, selected, stringsAsFactors=FALSE)
+    colnames(mat) <- c("node1","node2","index1","index2","score","selected")
     mat <- mat[order(mat$score, decreasing=TRUE),]
     rownames(mat) <- NULL
-    mat[1:nb,]
+    mat
   }
 )
 

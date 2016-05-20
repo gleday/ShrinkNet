@@ -1,9 +1,10 @@
 #' Gene network reconstruction using global-local shrinkage priors
 #'
-#' @param tX p by n data matrix of gene expression measurements (centered and scaled)
+#' @param tX p by n data matrix of gene expression measurements
 #' @param globalShrink integer. Either 1 or 2. See Details.
 #' @param nsamp0 integer. Number of randomly selected edges to estimate p0. See Details.
 #' @param blfdr numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.
+#' @param maxNbEdges numeric. Maximum number of edges to select.
 #' @param maxiter integer. Maximum number of iterations for the variational algorithm. Default is 100.
 #' @param tol numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.
 #' @param verbose logical. Should information on progress be printed?
@@ -27,7 +28,7 @@
 #' van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 #' 
 #' @export
-ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxiter=100, tol=0.001, verbose=TRUE, standardize=TRUE){
+ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxNbEdges=NULL, maxiter=100, tol=0.001, verbose=TRUE, standardize=TRUE){
 
   ##### Input checks
   if(is.matrix(tX)){
@@ -76,6 +77,18 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxiter=100, t
   }else{
     stop("blfdr is not a numeric")
   }
+  if(is.null(maxNbEdges)){
+    maxNbEdges <- 0
+  }else{
+    if(is.numeric(maxNbEdges)){
+      maxNbEdges <- round(maxNbEdges)
+      if((maxNbEdges<=0) | (maxNbEdges>edgeTot) ){
+        stop(paste("maxNbEdges must take values between 1 and", edgeTot) )
+      }
+    }else{
+      stop("maxNbEdges is not a numeric")
+    }
+  }
   if(!is.logical(verbose)){
     stop("verbose is not a logical")
   }
@@ -103,15 +116,21 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxiter=100, t
   allSVDs <- sapply(1:nrow(tX), getSVD, tX=tX, simplify=FALSE)
   if(verbose) cat("DONE\n")
   
+  tps1 <- proc.time() - tps
+  
   ##### Algo
   if(verbose) cat("STEP 1: Variational algorithm...\n")
   eb <- HiddenVarAlgo(SVDs=allSVDs, tX=tX, aRand=aRand, bRand=bRand, maxiter=maxiter, globalShrink=globalShrink, tol=tol, verbose=verbose)
+  
+  tps2 <- proc.time() - tps - tps1
 
   ##### Calculate summary statistics from posteriors
   if(verbose) cat("STEP 2: Calculate summary statistics from posteriors... ")
   matThres <- sapply(1:nrow(tX), HiddenVarRidgeiGetKappa, SVDs=allSVDs, tX=tX, aRand=eb$parTau[nrow(eb$parTau),1], bRand=eb$parTau[nrow(eb$parTau),2], bRandStarInit=eb$allbRandStar, dSigmaStarInit=eb$alldSigmaStar, simplify=TRUE)
   matThres <- (matThres + t(matThres))/2
   if(verbose) cat("DONE\n")
+  
+  tps3 <- proc.time() - tps - tps1 - tps2
   
   ##### Estimate p0
   if(verbose) cat("STEP 3: Estimate p0... ")
@@ -126,20 +145,29 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxiter=100, t
     p0 <- 1-mean(allLogBFs>0)
   }
   if(verbose) cat("DONE\n")
+  
+  tps4 <- proc.time() - tps - tps1 - tps2 - tps3
 
   ##### Edge selection using Bayesian local false discovery rate
   if(verbose) cat("STEP 4: Edge selection... ")
-  selGraph <- HiddenEdgeSelection(themat=matThres, tX=tX, p0=p0, lfdrcut=blfdr)
+  selGraph <- HiddenEdgeSelection(themat=matThres, tX=tX, p0=p0, lfdrcut=blfdr, maxNbEdges=maxNbEdges)
   nbedge <- sum(selGraph)/2
   if(verbose){
     cat("DONE\n\n")
     cat("prior null probability p0 =", round(p0,5), "\n")
     cat("", nbedge, " selected edges out of ", edgeTot, " (",round(100*nbedge/edgeTot, 2),"%)", " using blfdr = ", blfdr, sep="")
   }
-  tps2 <- proc.time() - tps
+  tps5 <- proc.time() - tps - tps1 - tps2 - tps3 - tps4
+  tps6 <- proc.time() - tps
+  
+  ## Time 
+  mytime <- data.frame("elapsed"=c(tps1[3], tps2[3], tps3[3], tps4[3], tps5[3], tps6[3]))
+  mytime$"H:MM:SS" <- sapply(mytime$elapsed, .convertToTime)
+  rownames(mytime) <- c("STEP 0 (SVD decomposition)", "STEP 1 (variational algorithm)", "STEP 2 (summary statistics)", "STEP 3 (p0 estimation)", "STEP 4 (edge selection)", "overall")
+  
   if(verbose){
     cat("\n\n")
-    cat("Time (H:MM:SS):", .convertToTime(tps2[3]))
+    cat("Time (H:MM:SS):", .convertToTime(tps6[3]))
     cat("\n\n")
   }
   
@@ -148,13 +176,14 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxiter=100, t
   if(!is.null(rownames(tX))){
     myigraph <- igraph::set.vertex.attribute(myigraph, "name", value=rownames(tX))
   }
+  
   out <- new("ShrinkNet",
              graph = myigraph,
              kappa = matThres,
              p0 = p0,
              globalPrior = eb$parTau,
              allmargs = eb$allmargs,
-             time = tps2[3])
+             time = mytime)
   
   return(out)
 }

@@ -288,15 +288,14 @@ double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX){
 }
 
 // [[Rcpp::export]]
-arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut){
-  
-  int maxedges = 0.5*themat.nrow()*(themat.nrow()-1);
+arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges){
   
   mat mymat(themat.begin(),themat.nrow(),themat.ncol(),false);
   mat mymatL = trimatl(mymat);
   colvec uniquevals = unique(mymatL);
   colvec allvals = sort(uniquevals.elem(find(uniquevals!=0)), "descend");
-  
+  int maxedges = allvals.n_elem;
+
   // Algo
   mat tempGraph = zeros(themat.nrow(),themat.ncol());
   mat myGraph = zeros(themat.nrow(),themat.ncol());
@@ -307,12 +306,13 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
   double logML01, logML02, logML11, logML12;
   int cpt = 0;
   int ctstop = 0;
+  int nbSel = 0;
   bool mybool = true;
   double maxBF, minlfdr;
   colvec logBFs(2);
   logBFs.zeros();
   while(mybool){
-    
+
     // Consider new edge
     uvec newedge = find(mymat==allvals(cpt))/themat.nrow();
     tempGraph(newedge(1), newedge(0)) = 1;
@@ -325,39 +325,40 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
     colvec varSel2 = tempGraph.col(newedge(0));
     logML11 = HiddenVarRidgei(newedge(1)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel1.elem(find(linspace(1,tX.nrow(), tX.nrow())!=(newedge(1)+1))));
     logML12 = HiddenVarRidgei(newedge(0)+1, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, varSel2.elem(find(linspace(1,tX.nrow(), tX.nrow())!=(newedge(0)+1))));
-    
+
     // logarithm of Bayes factors
     logBFs(0) = logML11-logML01;
     logBFs(1) = logML12-logML02;
     maxBF = exp(max(logBFs));
     minlfdr = p0/(maxBF*(1-p0)+p0);
-    
     // Thresholding - edge selection
     if(minlfdr<=lfdrcut){
       myGraph(newedge(1), newedge(0)) = 1;
       myGraph(newedge(0), newedge(1)) = 1;
       allML(newedge(1)) = logML11;
       allML(newedge(0)) = logML12;
+      nbSel++;
       ctstop = 0;
     }else{
       tempGraph(newedge(1), newedge(0)) = 0;
       tempGraph(newedge(0), newedge(1)) = 0;
       ctstop++;
     }
-    //Rcpp::Rcout << "cpt = " << cpt << "    ctstop = " << ctstop << std::endl;
+    Rcpp::Rcout << "cpt = " << cpt << "    nbSel = " << nbSel << std::endl;
+    
     // Convergence
     if(cpt==(maxedges-1)){
       mybool = false;
     }else{
-      // Stop if no edges have been included over the last 1000 edges that have been investigated
-      //if(ctstop>=10000){
-      //  mybool = false;
-      //}else{
+      // Stop if the maximum number of edges to select is reached
+      if(maxNbEdges==nbSel){
+        mybool = false;
+      }else{
         cpt++;
-      //}
+      }
     }
   }
-  
+
   return myGraph;
 }
 

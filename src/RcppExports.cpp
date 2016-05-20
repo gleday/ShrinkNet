@@ -50,8 +50,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // HiddenEdgeSelection
-arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut);
-RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP lfdrcutSEXP) {
+arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges);
+RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP lfdrcutSEXP, SEXP maxNbEdgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -59,7 +59,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type tX(tXSEXP);
     Rcpp::traits::input_parameter< double >::type p0(p0SEXP);
     Rcpp::traits::input_parameter< double >::type lfdrcut(lfdrcutSEXP);
-    __result = Rcpp::wrap(HiddenEdgeSelection(themat, tX, p0, lfdrcut));
+    Rcpp::traits::input_parameter< int >::type maxNbEdges(maxNbEdgesSEXP);
+    __result = Rcpp::wrap(HiddenEdgeSelection(themat, tX, p0, lfdrcut, maxNbEdges));
     return __result;
 END_RCPP
 }

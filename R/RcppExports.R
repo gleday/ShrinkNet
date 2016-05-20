@@ -13,8 +13,8 @@ HiddenEstimatep0 <- function(themat, tX) {
     .Call('ShrinkNet_HiddenEstimatep0', PACKAGE = 'ShrinkNet', themat, tX)
 }
 
-HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut) {
-    .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut)
+HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut, maxNbEdges) {
+    .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut, maxNbEdges)
 }
 
 HiddenVarRidgeiGetKappa <- function(ii, SVDs, tX, aRand, bRand, bRandStarInit, dSigmaStarInit) {

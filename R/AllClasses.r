@@ -33,5 +33,5 @@ setClass("ShrinkNet",
                         p0 = "numeric",
                         globalPrior = "matrix",
                         allmargs = "matrix",
-                        time = "numeric")
+                        time = "data.frame")
 )
