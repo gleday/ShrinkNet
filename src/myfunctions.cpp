@@ -344,7 +344,7 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
       tempGraph(newedge(0), newedge(1)) = 0;
       ctstop++;
     }
-    Rcpp::Rcout << "cpt = " << cpt << "    nbSel = " << nbSel << std::endl;
+    //Rcpp::Rcout << "cpt = " << cpt << "    nbSel = " << nbSel << std::endl;
     
     // Convergence
     if(cpt==(maxedges-1)){
