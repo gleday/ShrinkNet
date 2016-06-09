@@ -117,6 +117,8 @@ setMethod(
     mat$"index1" <- indx[,1]
     mat$"index2" <- indx[,2]
     mat$score <- apply(indx, 1, function(x){object@kappa[x[1],x[2]]})
+    mat$logMaxBF <- apply(indx, 1, function(x){object@logMaxBFs[x[1],x[2]]})
+    mat$blfdr <- apply(indx, 1, function(x){object@p0/(exp(object@logMaxBFs)[x[1],x[2]]*(1-object@p0)+object@p0)})
     mat <- mat[order(mat$score, decreasing=TRUE),]
     rownames(mat) <- NULL
     mat

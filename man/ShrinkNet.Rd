@@ -5,16 +5,19 @@
 \title{Gene network reconstruction using global-local shrinkage priors}
 \usage{
 ShrinkNet(tX, globalShrink = 1, nsamp0 = NULL, blfdr = 0.1,
-  maxiter = 100, tol = 0.001, verbose = TRUE, standardize = TRUE)
+  maxNbEdges = NULL, maxiter = 100, tol = 0.001, verbose = TRUE,
+  standardize = TRUE)
 }
 \arguments{
-\item{tX}{p by n data matrix of gene expression measurements (centered and scaled)}
+\item{tX}{p by n data matrix of gene expression measurements}
 
 \item{globalShrink}{integer. Either 1 or 2. See Details.}
 
 \item{nsamp0}{integer. Number of randomly selected edges to estimate p0. See Details.}
 
 \item{blfdr}{numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
+
+\item{maxNbEdges}{numeric. Maximum number of edges to select.}
 
 \item{maxiter}{integer. Maximum number of iterations for the variational algorithm. Default is 100.}
 

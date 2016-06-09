@@ -150,7 +150,9 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxNbEdges=NUL
 
   ##### Edge selection using Bayesian local false discovery rate
   if(verbose) cat("STEP 4: Edge selection... ")
-  selGraph <- HiddenEdgeSelection(themat=matThres, tX=tX, p0=p0, lfdrcut=blfdr, maxNbEdges=maxNbEdges)
+  resSel <- HiddenEdgeSelection(themat=matThres, tX=tX, p0=p0, lfdrcut=blfdr, maxNbEdges=maxNbEdges)
+  selGraph <- resSel$myGraph
+  logMaxBFs <- Matrix(resSel$logMaxBFs, sparse=TRUE)
   nbedge <- sum(selGraph)/2
   if(verbose){
     cat("DONE\n\n")
@@ -181,6 +183,7 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxNbEdges=NUL
              graph = myigraph,
              kappa = matThres,
              p0 = p0,
+             logMaxBFs = logMaxBFs,
              globalPrior = eb$parTau,
              allmargs = eb$allmargs,
              time = mytime)

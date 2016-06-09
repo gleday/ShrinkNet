@@ -70,6 +70,8 @@ An S4 class representing the output of the \code{\link{ShrinkNet}} function.
 
 \item{\code{p0}}{numeric. A number giving the estimate of the proportion of null hypothesis.}
 
+\item{\code{logMaxBFs}}{matrix. The matrix containing the log-max Bayes factor for each edge (see Leday et. al (2015)).}
+
 \item{\code{globalPrior}}{matrix. A matrix containing the (shape and rate) parameters of the global shrinkage prior
 (gamma distribution) at each iteration of the variational algorithm.}
 

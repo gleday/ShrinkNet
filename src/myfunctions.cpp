@@ -288,7 +288,7 @@ double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX){
 }
 
 // [[Rcpp::export]]
-arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges){
+Rcpp::List HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges){
   
   mat mymat(themat.begin(),themat.nrow(),themat.ncol(),false);
   mat mymatL = trimatl(mymat);
@@ -299,6 +299,7 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
   // Algo
   mat tempGraph = zeros(themat.nrow(),themat.ncol());
   mat myGraph = zeros(themat.nrow(),themat.ncol());
+  mat tempAllLogMaxBF = zeros(themat.nrow(),themat.ncol());
   colvec allML(themat.nrow());
   for(int j=1; j<=tX.nrow(); j++){
     allML(j-1) = HiddenVarRidgei(j, tX, 0.5, (double) tX.ncol()/2, 0.001, 0.001, 5000, zeros(tX.nrow()-1));
@@ -335,6 +336,8 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
     if(minlfdr<=lfdrcut){
       myGraph(newedge(1), newedge(0)) = 1;
       myGraph(newedge(0), newedge(1)) = 1;
+      tempAllLogMaxBF(newedge(1), newedge(0)) = max(logBFs);
+      tempAllLogMaxBF(newedge(0), newedge(1)) = max(logBFs);
       allML(newedge(1)) = logML11;
       allML(newedge(0)) = logML12;
       nbSel++;
@@ -359,7 +362,8 @@ arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX
     }
   }
 
-  return myGraph;
+  //return myGraph;
+  return Rcpp::List::create(Rcpp::Named("myGraph") = myGraph, Rcpp::Named("logMaxBFs") = tempAllLogMaxBF);
 }
 
 double myf(int myk, mat mm1, mat mm2){

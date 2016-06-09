@@ -50,7 +50,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // HiddenEdgeSelection
-arma::mat HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges);
+Rcpp::List HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges);
 RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP lfdrcutSEXP, SEXP maxNbEdgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
