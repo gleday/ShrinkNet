@@ -152,7 +152,7 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxNbEdges=NUL
   if(verbose) cat("STEP 4: Edge selection... ")
   resSel <- HiddenEdgeSelection(themat=matThres, tX=tX, p0=p0, lfdrcut=blfdr, maxNbEdges=maxNbEdges)
   selGraph <- resSel$myGraph
-  logMaxBFs <- Matrix(resSel$logMaxBFs, sparse=TRUE)
+  logMaxBFs <- Matrix::Matrix(resSel$logMaxBFs, sparse=TRUE)
   nbedge <- sum(selGraph)/2
   if(verbose){
     cat("DONE\n\n")

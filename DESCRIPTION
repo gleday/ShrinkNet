@@ -10,7 +10,8 @@ Depends:
 Imports:
     Rcpp (>= 0.11.4),
     methods,
-    igraph
+    igraph,
+    Matrix
 Description: The present package enables the reconstruction of an undirected network
     that characterizes the conditional independence structure between variables.
     It implements a fast variational algorithm to approximate the posterior distributions
