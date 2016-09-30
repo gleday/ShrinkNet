@@ -2,8 +2,8 @@
 
 This R package implements the method described in
 
-Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van Wieringen, W. N., and van de Wiel, M. A. (2015).
-[Gene network reconstruction using global-local shrinkage priors](http://arxiv.org/abs/1510.03771). *Submitted*.
+Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van Wieringen, W. N., and van de Wiel, M. A. (2016).
+[Gene network reconstruction using global-local shrinkage priors](http://www.e-publications.org/ims/submission/AOAS/user/submissionFile/25409?confirm=c2e87384). *The Annals of Applied Statistics (to appear)*.
 
 ## Description
 
