@@ -54,7 +54,7 @@ adjacency(myobject)
 score(myobject)
 
 # Extract matrix containing the posterior means of regression coefficients in the SEM
-score(myobject)
+coef(myobject)
 
 # Plot convergence of the variational algorithm
 plotML(myobject)
