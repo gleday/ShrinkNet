@@ -164,4 +164,12 @@ setMethod(
   }
 )
 
-
+#' @rdname ShrinkNet-class
+#' @aliases coef
+setMethod(
+  f = "coef",
+  signature = "ShrinkNet",
+  definition = function(object,...){
+    object@beta
+  }
+)

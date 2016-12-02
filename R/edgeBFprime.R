@@ -3,6 +3,6 @@
 
 # Author: Gwenael G.R. Leday
 
-.edgeBFprime <- function(idx, themat, tX){
-  .Call('ShrinkNet_HiddenEdgeBFprime', PACKAGE = 'ShrinkNet', idx, themat, tX)
+.edgeBFprime <- function(idx, themat, tX, cSigma, dSigma){
+  .Call('ShrinkNet_HiddenEdgeBFprime', PACKAGE = 'ShrinkNet', idx, themat, tX, cSigma=cSigma, dSigma=dSigma)
 }

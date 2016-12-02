@@ -5,6 +5,8 @@ This R package implements the method described in
 Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van Wieringen, W. N., and van de Wiel, M. A. (2016).
 [Gene network reconstruction using global-local shrinkage priors](http://www.e-publications.org/ims/submission/AOAS/user/submissionFile/25409?confirm=c2e87384). *The Annals of Applied Statistics (to appear)*.
 
+Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., Leday, G.G.R., and van de Wiel, M.A. (2016). [An empirical Bayes approach to network recovery using external knowledge](https://arxiv.org/abs/1605.07514). *Submitted*.
+
 ## Description
 
 ShrinkNet enables the reconstruction of an undirected network from high-throughput molecular data that characterizes the *conditional independence* structure between the molecular variables.

@@ -16,5 +16,6 @@ exportMethods(
   "show",
   "summary",
   "topEdges",
-  "topDegree"
+  "topDegree",
+  "coef"
 )

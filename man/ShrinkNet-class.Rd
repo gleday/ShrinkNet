@@ -5,6 +5,8 @@
 \alias{ShrinkNet-class}
 \alias{adjacency}
 \alias{adjacency,ShrinkNet-method}
+\alias{coef}
+\alias{coef,ShrinkNet-method}
 \alias{listEdges}
 \alias{listEdges,ShrinkNet-method}
 \alias{plotGraph}
@@ -48,6 +50,8 @@
 \S4method{topEdges}{ShrinkNet}(object, nb = 20)
 
 \S4method{topDegree}{ShrinkNet}(object, nb = 20)
+
+\S4method{coef}{ShrinkNet}(object, ...)
 }
 \arguments{
 \item{x}{An object of class \code{ShrinkNet-class}}
@@ -68,6 +72,8 @@ An S4 class representing the output of the \code{\link{ShrinkNet}} function.
 
 \item{\code{kappa}}{matrix. The matrix containing scores used to rank edges.}
 
+\item{\code{beta}}{matrix. The matrix containing the posterior mean of regression coefficients of the SEM (the ith column correspond to the ith regression).}
+
 \item{\code{p0}}{numeric. A number giving the estimate of the proportion of null hypothesis.}
 
 \item{\code{logMaxBFs}}{matrix. The matrix containing the log-max Bayes factor for each edge (see Leday et. al (2015)).}
@@ -78,13 +84,11 @@ An S4 class representing the output of the \code{\link{ShrinkNet}} function.
 \item{\code{allmargs}}{matrix. A matrix containing the values of the variational lower bounds for each regression
 equation in the Bayesian SEM at each iteration of the variational algorithm.}
 
+\item{\code{logMLSel}}{numeric. Log-marginal likelihood of the selected BSEM.}
+
 \item{\code{time}}{numeric. Running time (in seconds) of ShrinkNet.}
 }}
 \author{
 Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
-}
-\references{
-Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
-van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 }
 
