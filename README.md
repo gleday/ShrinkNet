@@ -1,6 +1,6 @@
 # ShrinkNet
 
-This R package implements the method described in
+This R package implements the methods described in
 
 Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van Wieringen, W. N., and van de Wiel, M. A. (2016).
 [Gene network reconstruction using global-local shrinkage priors](http://www.e-publications.org/ims/submission/AOAS/user/submissionFile/25409?confirm=c2e87384). *The Annals of Applied Statistics (to appear)*.
@@ -49,6 +49,9 @@ summary(myobject)
 adjacency(myobject)
 
 # Extract matrix containing scores on edges (and used to rank them)
+score(myobject)
+
+# Extract matrix containing the posterior means of regression coefficients in the SEM
 score(myobject)
 
 # Plot convergence of the variational algorithm
