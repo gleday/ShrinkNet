@@ -2,23 +2,18 @@
 % Please edit documentation in R/ShrinkNet.R
 \name{ShrinkNet}
 \alias{ShrinkNet}
-\title{Gene Network Reconstruction using Global-Local Shrinkage Priors}
+\title{Gene network reconstruction using global-local shrinkage priors}
 \usage{
-ShrinkNet(tX, P = NULL, globalShrink = 1, p0 = NULL, nsamp0 = NULL,
-  blfdr = 0.1, maxNbEdges = NULL, maxiter = 100, tol = 0.001,
-  verbose = TRUE, standardize = TRUE, sel = TRUE, priorSig = c(0.001,
-  0.001), weights = NULL, intercept = TRUE)
+ShrinkNet(tX, globalShrink = 1, nsamp0 = NULL, blfdr = 0.1,
+  maxNbEdges = NULL, maxiter = 100, tol = 0.001, verbose = TRUE,
+  standardize = TRUE)
 }
 \arguments{
 \item{tX}{p by n data matrix of gene expression measurements}
 
-\item{P}{matrix. Partition matrix for structured regularization.}
-
 \item{globalShrink}{integer. Either 1 or 2. See Details.}
 
-\item{p0}{numeric. Prior estimate of the proportion of null hypotheses.}
-
-\item{nsamp0}{integer. If \code{p0}=\code{NULL}, number of randomly selected edges to estimate p0. See Details.}
+\item{nsamp0}{integer. Number of randomly selected edges to estimate p0. See Details.}
 
 \item{blfdr}{numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
 
@@ -31,29 +26,19 @@ ShrinkNet(tX, P = NULL, globalShrink = 1, p0 = NULL, nsamp0 = NULL,
 \item{verbose}{logical. Should information on progress be printed?}
 
 \item{standardize}{logical. Should the data be standardized? Default is TRUE.}
-
-\item{sel}{logical. Whether edge selection should be carried out.}
-
-\item{priorSig}{numeric. Vector of length 2 containg the shape and rate parameters of the gamma prior on the error precision.}
-
-\item{weights}{matrix. Prior weights given to edges.}
-
-\item{intercept}{logical. Whether an intercept should be included in the forward selection procedure.}
 }
 \value{
 An object of class \code{\link{ShrinkNet-class}}
 }
 \description{
-Gene Network Reconstruction using Global-Local Shrinkage Priors
+Gene network reconstruction using global-local shrinkage priors
 }
 \details{
 If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
 fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
-the approximate analytical solution of Leday et al (2016) is used.
+the approximate analytical solution of Leday et al (2015) is used.
 
-The user can specify using the argument \code{p0} a prior estimate of the proportion of edges not included in the graph,
-which may have been determined from prior studies or public repositories. If \code{p0}=\code{NULL}, p0 is inferred from data.
-In such case,  \code{nsamp0}=\code{NULL}, the proportion of null hypotheses p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
+When \code{nsamp0}=\code{NULL}, the proportion of null hypotheses p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
 When P is very large, it may me preferable to approximate p0 instead using a random subset of edges.
 If \code{nsamp0} is an integer, then a random subset of size \code{nsamp0} is selected to estimate p0.
 The default is \code{nsamp0}=\code{NULL} when p<=100 and \code{nsamp0}=1000 otherwise.
@@ -63,12 +48,6 @@ Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
 }
 \references{
 Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
-van de Wiel, M.A. (2016). Gene network reconstruction using global-local shrinkage priors. To appear in The Annals of Applied Statistics.
-
-Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., Leday, G.G.R., and
-van de Wiel, M.A. (2016). An empirical Bayes approach to network recovery using external knowledge. Submitted.
-
-Valpola, H. and Honkela, A. (2006). Hyperparameter adaptation in variational Bayes for the gamma distribution.
-Technical Report, Helsinki University of Technology.
+van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 }
 

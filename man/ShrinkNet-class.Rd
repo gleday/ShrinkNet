@@ -84,11 +84,13 @@ An S4 class representing the output of the \code{\link{ShrinkNet}} function.
 \item{\code{allmargs}}{matrix. A matrix containing the values of the variational lower bounds for each regression
 equation in the Bayesian SEM at each iteration of the variational algorithm.}
 
-\item{\code{logMLSel}}{numeric. Log-marginal likelihood of the selected BSEM.}
-
 \item{\code{time}}{numeric. Running time (in seconds) of ShrinkNet.}
 }}
 \author{
 Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
+}
+\references{
+Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
+van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 }
 

@@ -1,8 +1,8 @@
 Package: ShrinkNet
 Type: Package
-Title: Gene Network Reconstruction using Global-Local Shrinkage Priors
-Version: 2.0
-Date: 2016-11-18
+Title: Gene network reconstruction using global-local shrinkage priors
+Version: 1.0
+Date: 2015-09-08
 Author: Gwenael G.R. Leday <gwenael.leday@mrc-bsu.cam.ac.uk>
 Maintainer: Gwenael G.R. Leday <gwenael.leday@mrc-bsu.cam.ac.uk>
 Depends:
@@ -16,8 +16,7 @@ Description: The present package enables the reconstruction of an undirected net
     that characterizes the conditional independence structure between variables.
     It implements a fast variational algorithm to approximate the posterior distributions
     in the Bayesian simultaneous-equation model with global and local shrinkage priors, as
-    well as a selection procedure to infer the network structure. Prior knowledge on the
-    network topology can be incorporated into inference.
+    well as a selection procedure to infer the network structure.
 LazyLoad: yes
 License: GPL (>=2.0)
 LazyData: TRUE
