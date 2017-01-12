@@ -13,6 +13,7 @@ Although ShrinkNet was primarily developed to analyse mRNA expression data, the 
 
 ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm.
 
+**Remark:** ShrinkNet will soon be upgraded to allow the incorporation of prior knowledge as in [Kpogbezan et al. (2017)](https://arxiv.org/abs/1605.07514).
 
 ## Installation
 
