@@ -6,9 +6,14 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // HiddenVarRidgei
 double HiddenVarRidgei(int ii, Rcpp::NumericMatrix tX, double aRand, double bRand, double cSigma, double dSigma, int maxiter, arma::colvec varSel);
-RcppExport SEXP ShrinkNet_HiddenVarRidgei(SEXP iiSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP cSigmaSEXP, SEXP dSigmaSEXP, SEXP maxiterSEXP, SEXP varSelSEXP) {
+RcppExport SEXP _ShrinkNet_HiddenVarRidgei(SEXP iiSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP cSigmaSEXP, SEXP dSigmaSEXP, SEXP maxiterSEXP, SEXP varSelSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -26,7 +31,7 @@ END_RCPP
 }
 // HiddenEdgeBFprime
 arma::colvec HiddenEdgeBFprime(Rcpp::NumericVector idx, Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
-RcppExport SEXP ShrinkNet_HiddenEdgeBFprime(SEXP idxSEXP, SEXP thematSEXP, SEXP tXSEXP) {
+RcppExport SEXP _ShrinkNet_HiddenEdgeBFprime(SEXP idxSEXP, SEXP thematSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -39,7 +44,7 @@ END_RCPP
 }
 // HiddenEstimatep0
 double HiddenEstimatep0(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX);
-RcppExport SEXP ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP) {
+RcppExport SEXP _ShrinkNet_HiddenEstimatep0(SEXP thematSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,7 +56,7 @@ END_RCPP
 }
 // HiddenEdgeSelection
 Rcpp::List HiddenEdgeSelection(Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX, double p0, double lfdrcut, int maxNbEdges);
-RcppExport SEXP ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP lfdrcutSEXP, SEXP maxNbEdgesSEXP) {
+RcppExport SEXP _ShrinkNet_HiddenEdgeSelection(SEXP thematSEXP, SEXP tXSEXP, SEXP p0SEXP, SEXP lfdrcutSEXP, SEXP maxNbEdgesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -66,7 +71,7 @@ END_RCPP
 }
 // HiddenVarRidgeiGetKappa
 arma::mat HiddenVarRidgeiGetKappa(int ii, Rcpp::List SVDs, arma::mat tX, double aRand, double bRand, arma::colvec bRandStarInit, arma::colvec dSigmaStarInit);
-RcppExport SEXP ShrinkNet_HiddenVarRidgeiGetKappa(SEXP iiSEXP, SEXP SVDsSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP) {
+RcppExport SEXP _ShrinkNet_HiddenVarRidgeiGetKappa(SEXP iiSEXP, SEXP SVDsSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP bRandStarInitSEXP, SEXP dSigmaStarInitSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -83,7 +88,7 @@ END_RCPP
 }
 // HiddenVarAlgo
 Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, arma::mat tX, double aRand, double bRand, int maxiter, int globalShrink, double tol, bool verbose);
-RcppExport SEXP ShrinkNet_HiddenVarAlgo(SEXP SVDsSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP, SEXP verboseSEXP) {
+RcppExport SEXP _ShrinkNet_HiddenVarAlgo(SEXP SVDsSEXP, SEXP tXSEXP, SEXP aRandSEXP, SEXP bRandSEXP, SEXP maxiterSEXP, SEXP globalShrinkSEXP, SEXP tolSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -101,7 +106,7 @@ END_RCPP
 }
 // getSVD
 Rcpp::List getSVD(int ii, Rcpp::NumericMatrix tX);
-RcppExport SEXP ShrinkNet_getSVD(SEXP iiSEXP, SEXP tXSEXP) {
+RcppExport SEXP _ShrinkNet_getSVD(SEXP iiSEXP, SEXP tXSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -110,4 +115,20 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(getSVD(ii, tX));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_ShrinkNet_HiddenVarRidgei", (DL_FUNC) &_ShrinkNet_HiddenVarRidgei, 8},
+    {"_ShrinkNet_HiddenEdgeBFprime", (DL_FUNC) &_ShrinkNet_HiddenEdgeBFprime, 3},
+    {"_ShrinkNet_HiddenEstimatep0", (DL_FUNC) &_ShrinkNet_HiddenEstimatep0, 2},
+    {"_ShrinkNet_HiddenEdgeSelection", (DL_FUNC) &_ShrinkNet_HiddenEdgeSelection, 5},
+    {"_ShrinkNet_HiddenVarRidgeiGetKappa", (DL_FUNC) &_ShrinkNet_HiddenVarRidgeiGetKappa, 7},
+    {"_ShrinkNet_HiddenVarAlgo", (DL_FUNC) &_ShrinkNet_HiddenVarAlgo, 8},
+    {"_ShrinkNet_getSVD", (DL_FUNC) &_ShrinkNet_getSVD, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_ShrinkNet(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

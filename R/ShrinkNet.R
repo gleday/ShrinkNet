@@ -20,9 +20,15 @@
 #' If \code{nsamp0} is an integer, then a random subset of size \code{nsamp0} is selected to estimate p0.
 #' The default is \code{nsamp0}=\code{NULL} when p<=100 and \code{nsamp0}=1000 otherwise.
 #' 
+#' @useDynLib ShrinkNet
+#' @import Rcpp
+#' @importFrom "Matrix" "Matrix"
+#' @importFrom "igraph" "set_vertex_attr" "graph.adjacency"
+#' @importFrom "methods" "new"
+#' 
 #' @return An object of class \code{\link{ShrinkNet-class}}
 #' 
-#' @author Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
+#' @author Gwenael G.R. Leday
 #' 
 #' @references Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
 #' van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
@@ -178,18 +184,20 @@ ShrinkNet <- function(tX, globalShrink=1, nsamp0=NULL, blfdr=0.1, maxNbEdges=NUL
   ## Output
   myigraph <- igraph::graph.adjacency(selGraph, mode = "undirected")
   if(!is.null(rownames(tX))){
-    myigraph <- igraph::set.vertex.attribute(myigraph, "name", value=rownames(tX))
+    myigraph <- igraph::set_vertex_attr(myigraph, "name", value=rownames(tX))
   }
   
-  out <- new("ShrinkNet",
-             graph = myigraph,
-             kappa = matThres,
-             beta = matBeta,
-             p0 = p0,
-             logMaxBFs = logMaxBFs,
-             globalPrior = eb$parTau,
-             allmargs = eb$allmargs,
-             time = mytime)
+  out <- methods::new(
+    "ShrinkNet",
+    graph = myigraph,
+    kappa = matThres,
+    beta = matBeta,
+    p0 = p0,
+    logMaxBFs = logMaxBFs,
+    globalPrior = eb$parTau,
+    allmargs = eb$allmargs,
+    time = mytime
+    )
   
   return(out)
 }

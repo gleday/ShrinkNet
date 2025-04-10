@@ -4,9 +4,17 @@
 \alias{ShrinkNet}
 \title{Gene network reconstruction using global-local shrinkage priors}
 \usage{
-ShrinkNet(tX, globalShrink = 1, nsamp0 = NULL, blfdr = 0.1,
-  maxNbEdges = NULL, maxiter = 100, tol = 0.001, verbose = TRUE,
-  standardize = TRUE)
+ShrinkNet(
+  tX,
+  globalShrink = 1,
+  nsamp0 = NULL,
+  blfdr = 0.1,
+  maxNbEdges = NULL,
+  maxiter = 100,
+  tol = 0.001,
+  verbose = TRUE,
+  standardize = TRUE
+)
 }
 \arguments{
 \item{tX}{p by n data matrix of gene expression measurements}
@@ -43,11 +51,10 @@ When P is very large, it may me preferable to approximate p0 instead using a ran
 If \code{nsamp0} is an integer, then a random subset of size \code{nsamp0} is selected to estimate p0.
 The default is \code{nsamp0}=\code{NULL} when p<=100 and \code{nsamp0}=1000 otherwise.
 }
-\author{
-Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
-}
 \references{
 Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
 van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 }
-
+\author{
+Gwenael G.R. Leday
+}

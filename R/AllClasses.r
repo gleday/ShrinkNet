@@ -24,18 +24,23 @@
 #'  \item{print}{Print the object information}
 #'  \item{show}{Print the object information}
 #'
+#' @importFrom "methods" "setClass" "representation"
+#'
 #' @author Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>
 #' 
 #' @references Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
 #' van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
 #'
-setClass("ShrinkNet",
-         representation(graph = "ANY",
-                        kappa = "matrix",
-                        beta = "matrix",
-                        p0 = "numeric",
-                        logMaxBFs = "ANY",
-                        globalPrior = "matrix",
-                        allmargs = "matrix",
-                        time = "data.frame")
+methods::setClass(
+  "ShrinkNet",
+  methods::representation(
+    graph = "ANY",
+    kappa = "matrix",
+    beta = "matrix",
+    p0 = "numeric",
+    logMaxBFs = "ANY",
+    globalPrior = "matrix",
+    allmargs = "matrix",
+    time = "data.frame"
+    )
 )

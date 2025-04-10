@@ -76,6 +76,7 @@ setMethod(
 
 #' @rdname ShrinkNet-class
 #' @aliases plotPrior
+#' @importFrom "stats" "dgamma" "qgamma"
 setMethod(
   f = "plotPrior",
   signature = "ShrinkNet",

@@ -2,30 +2,45 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 HiddenVarRidgei <- function(ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSel) {
-    .Call('ShrinkNet_HiddenVarRidgei', PACKAGE = 'ShrinkNet', ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSel)
+    .Call('_ShrinkNet_HiddenVarRidgei', PACKAGE = 'ShrinkNet', ii, tX, aRand, bRand, cSigma, dSigma, maxiter, varSel)
 }
 
-HiddenEdgeBFprime <- function(idx, themat, tX) {
-    .Call('ShrinkNet_HiddenEdgeBFprime', PACKAGE = 'ShrinkNet', idx, themat, tX)
+.edgeBFprime <- function(idx, themat, tX) {
+    .Call('_ShrinkNet_HiddenEdgeBFprime', PACKAGE = 'ShrinkNet', idx, themat, tX)
 }
 
 HiddenEstimatep0 <- function(themat, tX) {
-    .Call('ShrinkNet_HiddenEstimatep0', PACKAGE = 'ShrinkNet', themat, tX)
+    .Call('_ShrinkNet_HiddenEstimatep0', PACKAGE = 'ShrinkNet', themat, tX)
 }
 
 HiddenEdgeSelection <- function(themat, tX, p0, lfdrcut, maxNbEdges) {
-    .Call('ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut, maxNbEdges)
+    .Call('_ShrinkNet_HiddenEdgeSelection', PACKAGE = 'ShrinkNet', themat, tX, p0, lfdrcut, maxNbEdges)
 }
 
 HiddenVarRidgeiGetKappa <- function(ii, SVDs, tX, aRand, bRand, bRandStarInit, dSigmaStarInit) {
-    .Call('ShrinkNet_HiddenVarRidgeiGetKappa', PACKAGE = 'ShrinkNet', ii, SVDs, tX, aRand, bRand, bRandStarInit, dSigmaStarInit)
+    .Call('_ShrinkNet_HiddenVarRidgeiGetKappa', PACKAGE = 'ShrinkNet', ii, SVDs, tX, aRand, bRand, bRandStarInit, dSigmaStarInit)
 }
 
 HiddenVarAlgo <- function(SVDs, tX, aRand, bRand, maxiter, globalShrink, tol, verbose) {
-    .Call('ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, tX, aRand, bRand, maxiter, globalShrink, tol, verbose)
+    .Call('_ShrinkNet_HiddenVarAlgo', PACKAGE = 'ShrinkNet', SVDs, tX, aRand, bRand, maxiter, globalShrink, tol, verbose)
 }
 
+#' Convenience function for singular value decomposition
+#'
+#' @param ii integer. Gene index.
+#' @param tX p by n matrix of gene expression.
+#'
+#' @details
+#' The function returns the singular value decomposition of
+#' \eqn{X_{ii} = UDV^T}, where \eqn{X_{ii}} is the transpose of
+#' the matrix \code{tX} without the \code{ii}th row.
+#' 
+#' @return A named list with the following elements:
+#'  \item{u}{A matrix containing the left singular vectors.}
+#'  \item{d}{A vector containing the singular values.}
+#'  \item{v}{A matrix containing the right singular vectors.}
+#'  
 getSVD <- function(ii, tX) {
-    .Call('ShrinkNet_getSVD', PACKAGE = 'ShrinkNet', ii, tX)
+    .Call('_ShrinkNet_getSVD', PACKAGE = 'ShrinkNet', ii, tX)
 }
 

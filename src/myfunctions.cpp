@@ -1,7 +1,6 @@
 //[[Rcpp::depends(RcppArmadillo)]]
-#include <RcppArmadillo.h>
 #include <R.h>
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
 
 using namespace arma;
 
@@ -166,7 +165,7 @@ double HiddenVarRidgei(int ii,  Rcpp::NumericMatrix tX, double aRand, double bRa
   return L(ct-1);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(".edgeBFprime")]]
 arma::colvec HiddenEdgeBFprime(Rcpp::NumericVector idx, Rcpp::NumericMatrix themat, Rcpp::NumericMatrix tX){
   
   //Rcpp::Rcout << "edge = " << idx << std::endl;
@@ -530,7 +529,7 @@ arma::mat HiddenVarRidgeiGetKappa(int ii,  Rcpp::List SVDs, arma::mat tX, double
 
 arma::colvec mydigamma(colvec vec){
   colvec out(vec.n_elem);
-  for(int k = 0; k<vec.n_elem; k++){
+  for(uword k = 0; k<vec.n_elem; k++){
     out(k) = R::digamma(vec(k));
   }
   return out;
@@ -653,7 +652,22 @@ Rcpp::List HiddenVarAlgo(Rcpp::List SVDs, arma::mat tX, double aRand, double bRa
   return Rcpp::List::create(Rcpp::Named("parTau") = parTau.rows(0,ct), Rcpp::Named("allmargs") = allmargs.rows(0,ct), Rcpp::Named("allbRandStar") = allbRandStar, Rcpp::Named("alldSigmaStar") = alldSigmaStar);
 }//end varAlgo
 
-// [[Rcpp::export]]
+//' Convenience function for singular value decomposition
+//'
+//' @param ii integer. Gene index.
+//' @param tX p by n matrix of gene expression.
+//'
+//' @details
+//' The function returns the singular value decomposition of
+//' \eqn{X_{ii} = UDV^T}, where \eqn{X_{ii}} is the transpose of
+//' the matrix \code{tX} without the \code{ii}th row.
+//' 
+//' @return A named list with the following elements:
+//'  \item{u}{A matrix containing the left singular vectors.}
+//'  \item{d}{A vector containing the singular values.}
+//'  \item{v}{A matrix containing the right singular vectors.}
+//'  
+// [[Rcpp::export("getSVD")]]
 Rcpp::List getSVD(int ii,  Rcpp::NumericMatrix tX){
   
   // Data
