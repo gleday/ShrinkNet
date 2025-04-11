@@ -115,7 +115,7 @@ ShrinkNet <- function(
   )
 
   # maxNbEdges
-  maxNbEdges <- ifelse(is.null(maxNbEdges), 0, maxNbEdges)
+  maxNbEdges <- ifelse(is.null(maxNbEdges), edgeTot, maxNbEdges)
   assertthat::assert_that(
     assertthat::is.count(maxNbEdges),
     is.finite(maxNbEdges),
