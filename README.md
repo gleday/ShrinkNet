@@ -2,22 +2,46 @@
 
 This R package implements the method described in
 
-Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B., van der Vaart, A. W., van Wieringen, W. N., and van de Wiel, M. A. (2017).
-[Gene network reconstruction using global-local shrinkage priors](https://projecteuclid.org/euclid.aoas/1491616871). *The Annals of Applied Statistics.* 11 (2017), no. 1, 41--68.
+Leday, G. G. R., de Gunst, M. C. M., Kpogbezan, G. B.,
+van der Vaart, A. W., van Wieringen, W. N., and van de Wiel, M. A. (2017).
+[Gene network reconstruction using global-local shrinkage priors](https://projecteuclid.org/euclid.aoas/1491616871).
+*The Annals of Applied Statistics.* 11 (2017), no. 1, 41--68.
 
 ## Description
 
-ShrinkNet enables the reconstruction of an undirected network from high-throughput molecular data that characterizes the *conditional independence* structure between the molecular variables.
+ShrinkNet:
 
-Although ShrinkNet was primarily developed to analyse mRNA expression data, the method is general and can be applied to any data for which it is reasonable to assume a multivariate Gaussian model. In genomics, this may include protein ([Abkani et al., 2014](http://dx.doi.org/10.1038/ncomms4887)), microRNA ([Stingo et al., 2010](http://projecteuclid.org/euclid.aoas/1294167808)) and metabolomic data ([Krumsiek et al., 2011](http://www.biomedcentral.com/1752-0509/5/21)) for example.
+* enables the reconstruction of undirected networks from
+high-throughput molecular data
+* characterizes the *conditional independence* structure between
+the (molecular) variables
+* outperforms popular (sparse) methods
+* yields more stable edges
+* yields more reproducible discoveries
 
-ShrinkNet aims to be computationally efficient. Core functions are implemented in C++ using the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) software packages, and SVD decompositions are employed to speed up the variational algorithm.
+Although ShrinkNet was primarily developed to analyse mRNA expression data,
+the method is general and can be applied to any data for which it is
+reasonable to use Gaussian regression models.
+In genomics, this may include
+protein ([Abkani et al., 2014](http://dx.doi.org/10.1038/ncomms4887)),
+microRNA ([Stingo et al., 2010](http://projecteuclid.org/euclid.aoas/1294167808)) and
+metabolomic data ([Krumsiek et al., 2011](http://www.biomedcentral.com/1752-0509/5/21))
+for example.
 
-**Remark:** ShrinkNet will soon be upgraded to allow the incorporation of prior knowledge as in [Kpogbezan et al. (2017)](https://arxiv.org/abs/1605.07514).
+ShrinkNet aims to be computationally efficient.
+Core functions are implemented in C++ using
+the [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and
+[RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html)
+software packages,
+and SVD decompositions are employed to speed up the variational algorithm.
+
+**Remark:** ShrinkNet will soon be upgraded to allow the incorporation of
+prior knowledge as in [Kpogbezan et al. (2017)](https://arxiv.org/abs/1605.07514).
 
 ## Installation
 
-If you wish to install **ShrinkNet** from R (using package [devtools](https://cran.r-project.org/web/packages/devtools/index.html)):
+If you wish to install **ShrinkNet** from R
+(using package [devtools](https://cran.r-project.org/web/packages/devtools/index.html)):
 
 ```R
 install.packages("devtools")
@@ -26,16 +50,23 @@ install_github("gleday/ShrinkNet")
 library(ShrinkNet)
 ```
 
-**Remark:** For Mac OS X, it may be necessary to install a recent GNU Fortran compiler beforehand. See [here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/) for more explanations.
+**Remark:** For Mac OS X, it may be necessary to install a recent
+GNU Fortran compiler beforehand.
+See
+[here](http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/)
+for more explanations.
 
 ## Usage
 
-Given a data matrix *mydata*, where rows represent molecular variables (e.g. genes) and columns represent samples, ShrinkNet is run by the following R command:
+Given a data matrix *mydata*, where rows represent
+molecular variables (e.g. genes) and columns represent samples,
+ShrinkNet is run by the following R command:
 ```R
 myobject <- ShrinkNet(tX=mydata)
 ```
 
-The R function ShrinkNet() returns an (S4) object of class "ShrinkNet" that is associated with the following functions:
+The R function ShrinkNet() returns an S4 object of class "ShrinkNet"
+that is associated with the following methods:
 
 ```R
 # Print object information
@@ -75,7 +106,8 @@ topDegree(myobject, nb=10)
 
 ## Example 1
 
-- **Data:** gene expression data (B-lymphocyte cells) analysed by [Mohammadi and Wit (2015)](http://projecteuclid.org/euclid.ba/1422468425)
+- **Data:** gene expression data (B-lymphocyte cells)
+analysed by [Mohammadi and Wit (2015)](http://projecteuclid.org/euclid.ba/1422468425)
 - **Samples:** 60 unrelated individuals
 - **Variables:** 100 most variables probes/genes
 
@@ -117,7 +149,8 @@ Time (H:MM:SS): 0:00:17
 
 ## Example 2
 
-- **Data:** gene expression data from R package [care](https://cran.r-project.org/web/packages/care/index.html)
+- **Data:** gene expression data from R package
+[care](https://cran.r-project.org/web/packages/care/index.html)
 - **Samples:** 30 human brain samples
 - **Variables:** 403 genes
 
@@ -163,7 +196,8 @@ Time (H:MM:SS): 0:00:58
 
 ## Example 3
 
-- **Data:** gene expression data from R package [GeneNet](https://cran.r-project.org/web/packages/GeneNet/index.html)
+- **Data:** gene expression data from R package
+[GeneNet](https://cran.r-project.org/web/packages/GeneNet/index.html)
 - **Time points:** 9
 - **Variables:** 102 genes
 
@@ -208,7 +242,8 @@ Time (H:MM:SS): 0:00:02
 
 ## Example 4
 
-- **Data:** Protein expression data from [TCPA](http://app1.bioinformatics.mdanderson.org/tcpa/_design/basic/index.html) - Ovarian serous cystadenocarcinoma (OV)
+- **Data:** Protein expression data from
+[TCPA](http://app1.bioinformatics.mdanderson.org/tcpa/_design/basic/index.html) - Ovarian serous cystadenocarcinoma (OV)
 - **Samples:** 412 tumor samples
 - **Variables:** 190 proteins (as measured by reverse-phase protein arrays)
 

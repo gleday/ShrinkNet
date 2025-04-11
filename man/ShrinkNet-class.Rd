@@ -60,36 +60,47 @@
 
 \item{object}{An object of class \code{ShrinkNet-class}}
 
-\item{nb}{maximum number of edges (or nodes, depending on the function it applies to) to return, Default is 20.}
+\item{nb}{maximum number of edges or nodes (depending on
+the function it applies to) to return. Default is 20.}
 }
 \description{
-An S4 class representing the output of the \code{\link{ShrinkNet}} function.
+An S4 class representing the output of
+the \code{\link{ShrinkNet}} function.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{graph}}{igraph. A graph object of class \code{\link[igraph]{igraph}}.}
+\item{\code{graph}}{\code{\link[igraph]{igraph}} object}
 
-\item{\code{kappa}}{matrix. The matrix containing scores used to rank edges.}
+\item{\code{kappa}}{\code{matrix} of edge ranking scores}
 
-\item{\code{beta}}{matrix. The matrix containing the posterior mean of regression coefficients of the SEM (the ith column correspond to the ith regression).}
+\item{\code{beta}}{\code{matrix} containing the posterior mean of
+the SEM's regression coefficients (the ith column
+corresponds to the ith regression equation).}
 
-\item{\code{p0}}{numeric. A number giving the estimate of the proportion of null hypothesis.}
+\item{\code{p0}}{\code{numeric}, estimate of the
+proportion of null hypothesis.}
 
-\item{\code{logMaxBFs}}{matrix. The matrix containing the log-max Bayes factor for each edge (see Leday et. al (2015)).}
+\item{\code{logMaxBFs}}{\code{matrix} containing the log-max
+Bayes factor for each edge (see Leday et. al (2015)).}
 
-\item{\code{globalPrior}}{matrix. A matrix containing the (shape and rate) parameters of the global shrinkage prior
+\item{\code{globalPrior}}{\code{matrix} of the
+(shape and rate) parameter values for the global shrinkage prior
 (gamma distribution) at each iteration of the variational algorithm.}
 
-\item{\code{allmargs}}{matrix. A matrix containing the values of the variational lower bounds for each regression
-equation in the Bayesian SEM at each iteration of the variational algorithm.}
+\item{\code{allmargs}}{\code{matrix} of variational lower bounds for
+each regression equation in the SEM and each iteration of
+the variational algorithm.}
 
-\item{\code{time}}{numeric. Running time (in seconds) of ShrinkNet.}
+\item{\code{time}}{\code{numeric}, running time (in seconds).}
 }}
 
 \references{
-Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
-van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
+Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B.,
+van der Vaart, A.W., van Wieringen, W.N., and
+van de Wiel, M.A. (2015). Gene network reconstruction using
+global-local shrinkage priors. The Annals of Applied Statistics.
+11 (2017), no. 1, 41--68.
 }
 \author{
 Gwenael G.R. Leday <gwenael.leday (at) mrc-bsu.cam.ac.uk>

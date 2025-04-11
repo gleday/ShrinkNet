@@ -17,23 +17,31 @@ ShrinkNet(
 )
 }
 \arguments{
-\item{tX}{p by n data matrix of gene expression measurements}
+\item{tX}{\code{matrix}. Gene expression data with \eqn{p} rows
+(markers) and \eqn{n} columns (obervations).}
 
-\item{globalShrink}{integer. Either 1 or 2. See Details.}
+\item{globalShrink}{\code{integer}. Type of global shrinkage,
+equal to 1 or 2. See Details.}
 
-\item{nsamp0}{integer. Number of randomly selected edges to estimate p0. See Details.}
+\item{nsamp0}{\code{integer}. Number of randomly selected
+edges used to estimate \eqn{p_0}. See Details.}
 
-\item{blfdr}{numeric. Bayesian analogue of the local false discovery rate used for edge selection. Value should be between 0 and 1. Default is 0.1.}
+\item{blfdr}{\code{numeric}. Bayesian analogue of the
+local false discovery rate used for
+edge selection (value between 0 and 1). Default is 0.1.}
 
-\item{maxNbEdges}{numeric. Maximum number of edges to select.}
+\item{maxNbEdges}{\code{numeric}. Maximum number of edges to select.}
 
-\item{maxiter}{integer. Maximum number of iterations for the variational algorithm. Default is 100.}
+\item{maxiter}{\code{integer}. Maximum number of iterations
+for the variational algorithm. Default is 100.}
 
-\item{tol}{numeric. Represents the maximum relative convergence tolerance over the p variational lower bounds. Default is 0.001.}
+\item{tol}{\code{numeric}. Maximum relative convergence tolerance
+over the \eqn{p} variational lower bounds. Default is 0.001.}
 
-\item{verbose}{logical. Should information on progress be printed?}
+\item{verbose}{\code{logical}. Should information on progress be printed?}
 
-\item{standardize}{logical. Should the data be standardized? Default is TRUE.}
+\item{standardize}{\code{logical}. Should the data be
+standardized? Default is TRUE.}
 }
 \value{
 An object of class \code{\link{ShrinkNet-class}}
@@ -42,18 +50,28 @@ An object of class \code{\link{ShrinkNet-class}}
 Gene network reconstruction using global-local shrinkage priors
 }
 \details{
-If \code{globalShrink}=1 then empirical Bayes for the global shrinkage prior is carried out using
-fixed-point iterations as in Valpola and Honkela (2006). Otherwise, if \code{globalShrink}=2,
+When \code{globalShrink} = 1, empirical Bayes for the global
+shrinkage prior is carried out using fixed-point iterations as
+in Valpola and Honkela (2006). Otherwise, when \code{globalShrink} = 2,
 the approximate analytical solution of Leday et al (2015) is used.
 
-When \code{nsamp0}=\code{NULL}, the proportion of null hypotheses p0 is estimated using Bayes factors calculated for all P=0.5*p*(p-1) edges (cf Leday et al., 2015).
-When P is very large, it may me preferable to approximate p0 instead using a random subset of edges.
-If \code{nsamp0} is an integer, then a random subset of size \code{nsamp0} is selected to estimate p0.
-The default is \code{nsamp0}=\code{NULL} when p<=100 and \code{nsamp0}=1000 otherwise.
+When \code{nsamp0} = \code{NULL} (default), the proportion of null
+hypotheses \eqn{p_0} is estimated using the Bayes factors
+calculated for all \eqn{P = 0.5 * p * (p - 1)} edges,
+as in Leday et al (2015). However, when \eqn{P} is very large,
+it may be preferable (for computational reasons) to
+estimate \eqn{p_0} from a random subset of edges.
+The argument \code{nsamp0} allows to specify the size of
+the random subset. Currwently, the default is
+\code{nsamp0} = \code{NULL} when \eqn{p <= 100} and
+\code{nsamp0} = 1000 otherwise.
 }
 \references{
-Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B., van der Vaart, A.W., van Wieringen, W.N., and
-van de Wiel, M.A. (2015). Gene network reconstruction using global-local shrinkage priors. Submitted.
+Leday, G.G.R., de Gunst, M.C.M., Kpogbezan, G.B.,
+van der Vaart, A.W., van Wieringen, W.N., and
+van de Wiel, M.A. (2015). Gene network reconstruction using
+global-local shrinkage priors. The Annals of Applied Statistics.
+11 (2017), no. 1, 41--68.
 }
 \author{
 Gwenael G.R. Leday

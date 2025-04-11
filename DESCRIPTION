@@ -1,23 +1,28 @@
 Package: ShrinkNet
 Type: Package
-Title: Gene network reconstruction using global-local shrinkage priors
-Version: 1.0.1
-Date: 2025-04-10
-Author: Gwenael G.R. Leday [cre, aut]
-Authors@R: person("Gwenael G.R.","Leday", role=c("cre", "aut"), email="gwenael.leday@proton.me")
-Maintainer: Gwenael G.R. Leday <gwenael.leday@proton.me>
+Title: Gene Network Reconstruction using Global-Local Shrinkage Priors
+Version: 1.0.2
+Date: 2025-04-11
+Authors@R: person(
+      given = "Gwenaël G.R.",
+      family = "Leday",
+      email = "gwenael.leday@proton.me",
+      role = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-3753-4060")
+    )
+Maintainer: Gwenaël G.R. Leday <gwenael.leday@proton.me>
 Depends:
-    R (>= 3.1.0)
+    R (>= 4.1.0)
 Imports:
     Rcpp (>= 0.11.4),
     methods,
     igraph,
-    Matrix
-Description: The present package enables the reconstruction of an undirected network
-    that characterizes the conditional independence structure between variables.
-    It implements a fast variational algorithm to approximate the posterior distributions
-    in the Bayesian simultaneous-equation model with global and local shrinkage priors, as
-    well as a selection procedure to infer the network structure.
+    Matrix,
+    assertthat,
+    dplyr
+Description: Stable undirected network reconstruction from
+    high-dimensional data using a Bayesian simultaneous equation model (SEM)
+    with global and local shrinkage priors.
 LazyLoad: yes
 License: GPL (>=2.0)
 LinkingTo: Rcpp, RcppArmadillo
